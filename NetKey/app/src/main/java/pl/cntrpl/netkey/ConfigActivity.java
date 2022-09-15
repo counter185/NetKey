@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -89,6 +91,7 @@ public class ConfigActivity extends Activity {
     }
 
     public static List<CustomInput> customInputs = null;
+    public static int pollRate = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +121,7 @@ public class ConfigActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
+                pollRate = 17-((SeekBar)findViewById(R.id.sliderPollRate)).getProgress();
                 Bundle bndl = new Bundle();
                 bndl.putString("ipaddr", ((EditText)findViewById(R.id.editTextIP)).getText().toString());
                 bndl.putString("port", ((EditText)findViewById(R.id.editTextPort)).getText().toString());
@@ -131,6 +135,23 @@ public class ConfigActivity extends Activity {
                     }
                 }
                 startActivity(switchActivityIntent);
+            }
+        });
+
+        ((SeekBar)findViewById(R.id.sliderPollRate)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                ((TextView)findViewById(R.id.sliderPollRateText)).setText((1000/(17-i)) + "hz");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
