@@ -1,30 +1,302 @@
 # Gradle files
-.gradle/
-build/
+NetKey/.gradle/
+NetKey/build/
 
 # Local configuration file (sdk path, etc)
-local.properties
+NetKey/local.properties
 
 # Log/OS Files
-*.log
+NetKey/*.log
 
 # Android Studio generated files and folders
 captures/
-.externalNativeBuild/
-.cxx/
-*.apk
-output.json
+NetKey/.externalNativeBuild/
+NetKey/.cxx/
+NetKey/*.apk
+NetKey/output.json
 
 # IntelliJ
-*.iml
-.idea/
+NetKey/*.iml
+NetKey/.idea/
 
 # Keystore files
-*.jks
-*.keystore
+NetKey/*.jks
+NetKey/*.keystore
 
 # Google Services (e.g. APIs or Firebase)
-google-services.json
+NetKey/google-services.json
 
 # Android Profiling
-*.hprof
+NetKey/*.hprof
+
+
+#Server project:
+
+# User-specific files
+NetKeyServer/*.rsuser
+NetKeyServer/*.suo
+NetKeyServer/*.user
+NetKeyServer/*.userosscache
+NetKeyServer/*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+NetKeyServer/*.userprefs
+
+# Mono auto generated files
+NetKeyServer/mono_crash.*
+
+# Build results
+NetKeyServer/NetKeyServer/[Dd]ebug/
+NetKeyServer/NetKeyServer/[Dd]ebugPublic/
+NetKeyServer/NetKeyServer/[Rr]elease/
+NetKeyServer/NetKeyServer/[Rr]eleases/
+NetKeyServer/NetKeyServer/x64/
+NetKeyServer/NetKeyServer/x86/
+NetKeyServer/[Ww][Ii][Nn]32/
+NetKeyServer/[Aa][Rr][Mm]/
+NetKeyServer/[Aa][Rr][Mm]64/
+NetKeyServer/bld/
+NetKeyServer/NetKeyServer/[Bb]in/
+NetKeyServer/NetKeyServer/[Oo]bj/
+NetKeyServer/NetKeyServer/[Ll]og/
+NetKeyServer/NetKeyServer/[Ll]ogs/
+
+# Visual Studio 2015/2017 cache/options directory
+NetKeyServer/.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+# Visual Studio 2017 auto generated files
+NetKeyServer/Generated\ Files/
+
+# MSTest test Results
+NetKeyServer/[Tt]est[Rr]esult*/
+NetKeyServer/[Bb]uild[Ll]og.*
+
+# NUnit
+NetKeyServer/*.VisualState.xml
+NetKeyServer/TestResult.xml
+NetKeyServer/nunit-*.xml
+
+# Build Results of an ATL Project
+NetKeyServer/[Dd]ebugPS/
+NetKeyServer/[Rr]eleasePS/
+NetKeyServer/dlldata.c
+
+# Benchmark Results
+NetKeyServer/BenchmarkDotNet.Artifacts/
+
+# .NET Core
+NetKeyServer/project.lock.json
+NetKeyServer/project.fragment.lock.json
+NetKeyServer/artifacts/
+
+# ASP.NET Scaffolding
+NetKeyServer/ScaffoldingReadMe.txt
+
+# StyleCop
+NetKeyServer/StyleCopReport.xml
+
+# Files built by Visual Studio
+NetKeyServer/*_i.c
+NetKeyServer/*_p.c
+NetKeyServer/*_h.h
+NetKeyServer/*.ilk
+NetKeyServer/*.meta
+NetKeyServer/*.obj
+NetKeyServer/*.iobj
+NetKeyServer/*.pch
+NetKeyServer/*.pdb
+NetKeyServer/*.ipdb
+NetKeyServer/*.pgc
+NetKeyServer/*.pgd
+NetKeyServer/*.rsp
+NetKeyServer/*.sbr
+NetKeyServer/*.tlb
+NetKeyServer/*.tli
+NetKeyServer/*.tlh
+NetKeyServer/*.tmp
+NetKeyServer/*.tmp_proj
+NetKeyServer/*_wpftmp.csproj
+NetKeyServer/*.log
+NetKeyServer/*.tlog
+NetKeyServer/*.vspscc
+NetKeyServer/*.vssscc
+NetKeyServer/.builds
+NetKeyServer/*.pidb
+NetKeyServer/*.svclog
+NetKeyServer/*.scc
+
+# Chutzpah Test files
+NetKeyServer/_Chutzpah*
+
+# Visual C++ cache files
+NetKeyServer/ipch/
+NetKeyServer/*.aps
+NetKeyServer/*.ncb
+NetKeyServer/*.opendb
+NetKeyServer/*.opensdf
+NetKeyServer/*.sdf
+NetKeyServer/*.cachefile
+NetKeyServer/*.VC.db
+NetKeyServer/*.VC.VC.opendb
+
+# Visual Studio profiler
+NetKeyServer/*.psess
+NetKeyServer/*.vsp
+NetKeyServer/*.vspx
+NetKeyServer/*.sap
+
+# Visual Studio Trace Files
+NetKeyServer/*.e2e
+
+# TFS 2012 Local Workspace
+NetKeyServer/$tf/
+
+# Guidance Automation Toolkit
+NetKeyServer/*.gpState
+
+# ReSharper is a .NET coding add-in
+NetKeyServer/_ReSharper*/
+NetKeyServer/*.[Rr]e[Ss]harper
+NetKeyServer/*.DotSettings.user
+
+# TeamCity is a build add-in
+NetKeyServer/_TeamCity*
+
+# DotCover is a Code Coverage Tool
+NetKeyServer/*.dotCover
+
+# AxoCover is a Code Coverage Tool
+NetKeyServer/.axoCover/*
+NetKeyServer/!.axoCover/settings.json
+
+# Coverlet is a free, cross platform Code Coverage Tool
+NetKeyServer/coverage*.json
+NetKeyServer/coverage*.xml
+NetKeyServer/coverage*.info
+
+# Visual Studio code coverage results
+NetKeyServer/*.coverage
+NetKeyServer/*.coveragexml
+
+# NCrunch
+NetKeyServer/_NCrunch_*
+NetKeyServer/.*crunch*.local.xml
+NetKeyServer/nCrunchTemp_*
+
+# MightyMoose
+NetKeyServer/*.mm.*
+NetKeyServer/AutoTest.Net/
+
+# Web workbench (sass)
+NetKeyServer/.sass-cache/
+
+# Installshield output folder
+NetKeyServer/[Ee]xpress/
+
+# Click-Once directory
+NetKeyServer/publish/
+
+
+# NuGet Packages
+NetKeyServer/*.nupkg
+# NuGet Symbol Packages
+NetKeyServer/*.snupkg
+# The packages folder can be ignored because of Package Restore
+NetKeyServer/**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+NetKeyServer/!**/[Pp]ackages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/[Pp]ackages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+NetKeyServer/*.nuget.props
+NetKeyServer/*.nuget.targets
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+NetKeyServer/*.[Cc]ache
+# but keep track of directories ending in .cache
+NetKeyServer/!?*.[Cc]ache/
+
+# Others
+NetKeyServer/ClientBin/
+NetKeyServer/~$*
+NetKeyServer/*~
+NetKeyServer/*.dbmdl
+NetKeyServer/*.dbproj.schemaview
+NetKeyServer/*.jfm
+NetKeyServer/*.pfx
+NetKeyServer/*.publishsettings
+NetKeyServer/orleans.codegen.cs
+
+# Including strong name files can present a security risk
+# (https://github.com/github/gitignore/pull/2483#issue-259490424)
+#*.snk
+
+# Since there are multiple workflows, uncomment next line to ignore bower_components
+# (https://github.com/github/gitignore/pull/1529#issuecomment-104372622)
+#bower_components/
+
+# RIA/Silverlight projects
+NetKeyServer/Generated_Code/
+
+# Backup & report files from converting an old project file
+# to a newer Visual Studio version. Backup files are not needed,
+# because we have git ;-)
+NetKeyServer/_UpgradeReport_Files/
+NetKeyServer/Backup*/
+NetKeyServer/UpgradeLog*.XML
+NetKeyServer/UpgradeLog*.htm
+NetKeyServer/ServiceFabricBackup/
+NetKeyServer/*.rptproj.bak
+
+# Microsoft Fakes
+NetKeyServer/FakesAssemblies/
+
+# Visual Studio 6 build log
+NetKeyServer/*.plg
+
+# Visual Studio 6 workspace options file
+NetKeyServer/*.opt
+
+# Visual Studio 6 auto-generated workspace file (contains which files were open etc.)
+NetKeyServer/*.vbw
+
+# Visual Studio 6 auto-generated project file (contains which files were open etc.)
+NetKeyServer/*.vbp
+
+# Visual Studio 6 workspace and project file (working project files containing files to include in project)
+NetKeyServer/*.dsw
+NetKeyServer/*.dsp
+
+# Visual Studio 6 technical files
+NetKeyServer/*.ncb
+NetKeyServer/*.aps
+
+# MSBuild Binary and Structured Log
+NetKeyServer/*.binlog
+
+# Visual Studio History (VSHistory) files
+NetKeyServer/.vshistory/
+
+# Backup folder for Package Reference Convert tool in Visual Studio 2017
+NetKeyServer/MigrationBackup/
+
+# VS Code files for those working on multiple tools
+NetKeyServer/.vscode/*
+NetKeyServer/!.vscode/settings.json
+NetKeyServer/!.vscode/tasks.json
+NetKeyServer/!.vscode/launch.json
+NetKeyServer/!.vscode/extensions.json
+NetKeyServer/*.code-workspace
+
+# Local History for Visual Studio Code
+NetKeyServer/.history/
+
+# Windows Installer files from build outputs
+NetKeyServer/*.cab
+NetKeyServer/*.msi
+NetKeyServer/*.msix
+NetKeyServer/*.msm
+NetKeyServer/*.msp
