@@ -56,12 +56,12 @@ public class InputButton extends CustomInput {
     @Override
     public void AllTouchesUp() {
         state = false;
-        lastState = false;
     }
 
     @Override
     public void UpdateState(float touchX, float touchY) {
         state = TouchInBound(touchX, touchY);
+        lastState = state;
     }
 
     @Override

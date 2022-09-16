@@ -110,30 +110,16 @@ public class InputActivity extends Activity {
     private int lastTs = 0;
     private List<TouchState> tStates = new ArrayList<TouchState>();
     long lastUpd = 0;
+    int evts = 0;
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
-        for (CustomInput inp : customInputs){
-            inp.NextTick();
-        }
-
+        //Log.d("tt", "events"+(evts++)+", "+motionEvent.getAction());
         //Log.d("TouchTest", "Evts: " + motionEvent.getPointerCount());
         while (tStates.size() < motionEvent.getPointerCount()){
             tStates.add(new TouchState());
         }
-        for (int x = 0; x != motionEvent.getPointerCount(); x++){
-            float px = motionEvent.getX(x);
-            float py = motionEvent.getY(x);
-            for (CustomInput inp : customInputs){
-                if (inp.TouchInBound(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight())){
-                    inp.UpdateState(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight());
-                }
-            }
 
-            tStates.get(x).x = px;
-            tStates.get(x).y = py;
-            //Log.d("TouchTest", "TouchEvent " + x + " at " + px + "," + py);
-        }
 
 
         int cLastTs = 0;
@@ -147,20 +133,42 @@ public class InputActivity extends Activity {
                 inp.AllTouchesUp();
             }
             cLastTs += motionEvent.getPointerCount()-1;
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_POINTER_3_UP) {
+            cLastTs += motionEvent.getPointerCount() - 1;
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_POINTER_2_UP) {
+            cLastTs += motionEvent.getPointerCount() - 1;
         } else {
-            cLastTs = cLastTs += motionEvent.getPointerCount();
+            cLastTs += motionEvent.getPointerCount();
         }
         if (cLastTs != lastTs){
             Log.d("TouchTest", "Number of active touches changed from " + lastTs + " to " + cLastTs);
         }
         lastTs = cLastTs;
 
+        for (int x = 0; x != lastTs; x++){
+            float px = motionEvent.getX(x);
+            float py = motionEvent.getY(x);
+            for (CustomInput inp : customInputs){
+                if (inp.TouchInBound(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight())){
+                    inp.UpdateState(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight());
+                }
+            }
+
+            tStates.get(x).x = px;
+            tStates.get(x).y = py;
+            //Log.d("TouchTest", "TouchEvent " + x + " at " + px + "," + py);
+        }
+
+        //Log.d("t", "states: " + lastTs);
         for (int x = 0; x < tStates.size(); x++){
             tStates.get(x).active = x < lastTs;
         }
         /*if(motionEvent.getPointerCount() > 1) {
             System.out.println("Multitouch detected! " + pID);
         }*/
+        for (CustomInput inp : customInputs){
+            inp.NextTick();
+        }
         if (!RendererThread.canDoMultiThreadedRender && (System.currentTimeMillis() > lastUpd+32 || lastTs == 0)){
             img.invalidate();
             lastUpd = System.currentTimeMillis();
