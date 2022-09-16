@@ -46,9 +46,9 @@ NetKeyServer/*.userprefs
 NetKeyServer/mono_crash.*
 
 # Build results
-NetKeyServer/NetKeyServer/[Dd]ebug/
+NetKeyServer/*/[Dd]ebug/
 NetKeyServer/NetKeyServer/[Dd]ebugPublic/
-NetKeyServer/NetKeyServer/[Rr]elease/
+NetKeyServer/*/[Rr]elease/
 NetKeyServer/NetKeyServer/[Rr]eleases/
 NetKeyServer/NetKeyServer/x64/
 NetKeyServer/NetKeyServer/x86/
@@ -56,9 +56,9 @@ NetKeyServer/[Ww][Ii][Nn]32/
 NetKeyServer/[Aa][Rr][Mm]/
 NetKeyServer/[Aa][Rr][Mm]64/
 NetKeyServer/bld/
-NetKeyServer/NetKeyServer/[Bb]in/
-NetKeyServer/NetKeyServer/[Oo]bj/
-NetKeyServer/NetKeyServer/[Ll]og/
+NetKeyServer/*/[Bb]in/
+NetKeyServer/*/[Oo]bj/
+NetKeyServer/*/[Ll]og/
 NetKeyServer/NetKeyServer/[Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory

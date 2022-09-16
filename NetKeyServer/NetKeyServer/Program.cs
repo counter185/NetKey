@@ -25,64 +25,6 @@ for (int x = 0; x != states.Length; x++)
 {
     states[x] = false;
 }
-//bool[] states = new bool[] { false, false, false, false, false, false, false };
-
-
-//tcp code
-/*
-Int32 port = 5555;
-IPAddress localAddr = IPAddress.Parse("192.168.108.71");
-
-TcpListener server = new TcpListener(localAddr, port);
-
-server.Start();
-
-while (true)
-{
-    try
-    {
-        Console.Write("Waiting for a connection... ");
-
-        // Perform a blocking call to accept requests.
-        // You could also use server.AcceptSocket() here.
-        TcpClient client = server.AcceptTcpClient();
-        Console.WriteLine("Connected!");
-
-
-        // Get a stream object for reading and writing
-        NetworkStream stream = client.GetStream();
-
-        BinaryReader br = new BinaryReader(stream);
-        BinaryWriter binaryWriter = new BinaryWriter(stream);
-        int handshake = (int)ReverseBytes((uint)br.ReadInt32());
-        
-        Console.WriteLine("Read the handshake: " + handshake);
-        if (handshake == 0x40)
-        {
-            Console.WriteLine("valid btw");
-            binaryWriter.Write((int)ReverseBytes(0x41));
-        }
-
-        while (true)
-        {
-            //Console.WriteLine("Next frame");
-            int inputs = (int)ReverseBytes((uint)br.ReadInt32());
-            //Console.WriteLine(inputs+" inputs");
-            for (int i = 0; i < inputs; i++)
-            {
-                int state = (int)ReverseBytes((uint)br.ReadInt32());
-                keybd_event(bindings[i], 0, state == 0 ? KEYEVENTF_KEYUP : KEYEVENTF_KEYDOWN, 0);
-                //Console.WriteLine("State of input " + i + ": " + state);
-            }
-            binaryWriter.Write((int)ReverseBytes(0xFF));
-        }
-    } catch (Exception e)
-    {
-
-    }
-}
-*/
-
 
 UdpClient listener = new UdpClient(5555);
 IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, 5555);
