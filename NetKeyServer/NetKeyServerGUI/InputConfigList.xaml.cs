@@ -66,22 +66,23 @@ namespace NetKeyServerGUI
                     if (KeyPressed((Keys.VirtualKeyStates)x))
                     {
                         //Console.WriteLine(x);
+                        Keys.VirtualKeyStates k = (Keys.VirtualKeyStates)x;
                         switch (assiginingTo)
                         {
                             case 1:
-                                vKey = (Keys.VirtualKeyStates)x;
+                                vKey = k;
                                 break;
                             case 2:
-                                vKeyT1L = (Keys.VirtualKeyStates)x;
+                                vKeyT1L = k;
                                 break;
                             case 3:
-                                vKeyT1R = (Keys.VirtualKeyStates)x;
+                                vKeyT1R = k;
                                 break;
                             case 4:
-                                vKeyT2L = (Keys.VirtualKeyStates)x;
+                                vKeyT2L = k;
                                 break;
                             case 5:
-                                vKeyT2R = (Keys.VirtualKeyStates)x;
+                                vKeyT2R = k;
                                 break;
                         }
                         awaitingKey = false;
@@ -93,7 +94,7 @@ namespace NetKeyServerGUI
                             } else if (x >= 48 && x <= 57) {
                                 target.Content = "" + (char)((int)'0' + (x - 48));
                             } else {
-                                target.Content = vKey.ToString();
+                                target.Content = k.ToString();
                             }
                         });
                         Thread.EndThreadAffinity();

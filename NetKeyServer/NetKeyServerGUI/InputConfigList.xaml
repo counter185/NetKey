@@ -9,11 +9,11 @@
     <Grid>
         <Label x:Name="keyLabel" Content="Key #" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top"/>
         <Rectangle x:Name="pressedIndicator" HorizontalAlignment="Left" Height="26" Margin="54,34,0,0" Stroke="Black" VerticalAlignment="Top" Width="142" Fill="White"/>
-        <Grid x:Name="GridSimpleButton" HorizontalAlignment="Left" Height="32" Margin="10,64,0,0" VerticalAlignment="Top" Width="186" d:IsHidden="True">
+        <Grid x:Name="GridSimpleButton" HorizontalAlignment="Left" Height="32" Margin="214,14,0,0" VerticalAlignment="Top" Width="186">
             <Label Content="Assign" HorizontalAlignment="Left" Margin="56,0,0,0" VerticalAlignment="Top"/>
             <Button x:Name="assignmentButton" Content="Button" HorizontalAlignment="Left" Margin="106,0,0,0" VerticalAlignment="Top" Width="80" Height="26" Click="assignmentButton_Click"/>
         </Grid>
-        <Grid x:Name="GridSlider" HorizontalAlignment="Left" Height="108" Margin="10,64,0,0" VerticalAlignment="Top" Width="186">
+        <Grid x:Name="GridSlider" HorizontalAlignment="Left" Height="108" Margin="214,14,0,0" VerticalAlignment="Top" Width="186">
             <Label Content="T1 Left" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Button x:Name="asssignSlideT1Left" Content="Button" HorizontalAlignment="Left" Margin="96,0,0,0" VerticalAlignment="Top" Width="80" Height="26" Click="assignmentButtonT1L_Click"/>
             <Rectangle x:Name="pressedIndicatorT1LSlide" HorizontalAlignment="Left" Height="26" Margin="50,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="41" Fill="White"/>

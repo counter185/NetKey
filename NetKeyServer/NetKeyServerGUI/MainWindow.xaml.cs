@@ -133,7 +133,7 @@ namespace NetKeyServerGUI
                             {
                                 short slider1 = (short)((state & 0xFFFF0000) >> 16);
                                 short slider2 = (short)(state & 0xFFFF);
-                                Console.WriteLine("Slider " + i + ": " + state);
+                                //Console.WriteLine("Slider " + i + ": " + state);
                                 //Console.WriteLine("Slider " + i + ": " + slider1 + ":"+slider2+", ");
 
                                 SetKeyState((int)bindings[i].vKeyT1L, slider1 < 0);
