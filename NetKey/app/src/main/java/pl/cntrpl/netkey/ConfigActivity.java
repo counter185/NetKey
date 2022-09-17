@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ConfigActivity extends Activity {
 
-    public List<List<Boolean>> inputs = new ArrayList<List<Boolean>>();
+    public List<List<Integer>> inputs = new ArrayList<List<Integer>>();
 
     public void CreateRows(){
 
@@ -49,13 +49,22 @@ public class ConfigActivity extends Activity {
                 nBtn.setLayoutParams(ltParams);
                 int a = x;
                 int b = y;
-                nBtn.setText(!inputs.get(a).get(b) ? "OFF" : "ON");
+                int st = inputs.get(a).get(b);
+                nBtn.setText(st == 0 ? "OFF"
+                        : st == 1 ? "BTN"
+                        : st == 2 ? "SLIDER"
+                        : "???");
                 nBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        boolean currentState = inputs.get(a).get(b);
-                        inputs.get(a).set(b, !currentState);
-                        nBtn.setText(!currentState ? "ON" : "OFF");
+                        int currentState = inputs.get(a).get(b);
+                        currentState++;
+                        currentState%=3;
+                        inputs.get(a).set(b, currentState);
+                        nBtn.setText(currentState == 0 ? "OFF"
+                                : currentState == 1 ? "BTN"
+                                : currentState == 2 ? "SLIDER"
+                                : "???");
                     }
                 });
                 nLayout.addView(nBtn);
@@ -71,7 +80,7 @@ public class ConfigActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     if (inputs.get(a).size() != 100){
-                        inputs.get(a).add(true);
+                        inputs.get(a).add(1);
                         CreateRows();
                     }
                 }
@@ -100,12 +109,12 @@ public class ConfigActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
 
-        inputs.add(new ArrayList<Boolean>(Arrays.asList(true,true,true,true)));
+        inputs.add(new ArrayList<Integer>(Arrays.asList(1,1,1,1)));
 
         ((Button)findViewById(R.id.buttonRowsUp)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                inputs.add(new ArrayList<Boolean>(Arrays.asList(true,true,true,true)));
+                inputs.add(new ArrayList<Integer>(Arrays.asList(1,1,1,1)));
                 CreateRows();
             }
         });
@@ -130,14 +139,15 @@ public class ConfigActivity extends Activity {
                 bndl.putString("port", ((EditText)findViewById(R.id.editTextPort)).getText().toString());
                 switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
                 customInputs = new ArrayList<CustomInput>();
-                customInputs.add(new InputDivaSlider(0,1,3));   //TODO: only for debug
-                /*for (int x = 0; x != inputs.size(); x++){
+                for (int x = 0; x != inputs.size(); x++){
                     for (int y = 0; y != inputs.get(x).size(); y++) {
-                        if (inputs.get(x).get(y)) {
+                        if (inputs.get(x).get(y) == 1) {
                             customInputs.add(new InputButton(inputs.get(x).size()*x+ y, inputs.get(x).size(), inputs.size()));
+                        } else if (inputs.get(x).get(y) == 2){
+                            customInputs.add(new InputDivaSlider(inputs.get(x).size()*x+ y, inputs.get(x).size(), inputs.size()));
                         }
                     }
-                }*/
+                }
                 startActivity(switchActivityIntent);
             }
         });

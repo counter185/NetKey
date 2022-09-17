@@ -35,6 +35,17 @@ namespace NetKeyServerGUI
         const uint KEYEVENTF_KEYDOWN = 0x0000; // New definition
         const uint KEYEVENTF_KEYUP = 0x0002; //Key up flag
 
+        public bool[] vKeyStates = new bool[0xFF];
+
+        public void SetKeyState(int key, bool state)
+        {
+            if (vKeyStates[key] != state)
+            {
+                vKeyStates[key] = state;
+                keybd_event((byte)key, 0, !state ? KEYEVENTF_KEYUP : KEYEVENTF_KEYDOWN, 0);
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -65,14 +76,14 @@ namespace NetKeyServerGUI
         {
             Dispatcher.Invoke(delegate
             {
-                states.Add(false);
+                states.Add(0);
                 bindings.Add(new InputConfigList());
                 bindings[bindings.Count - 1].keyLabel.Content = "Key " + bindings.Count;
                 bindingsList.Items.Add(bindings[bindings.Count - 1]);
             });
         }
 
-        public List<bool> states = new List<bool>();
+        public List<int> states = new List<int>();
         public List<InputConfigList> bindings = new List<InputConfigList>();
 
         public void ThreadUDPServer()
@@ -94,7 +105,7 @@ namespace NetKeyServerGUI
                         //Console.WriteLine("Next frame");
                         bytes = listener.Receive(ref groupEP);
                         int inputs = (int)ReverseBytes((uint)BitConverter.ToInt32(bytes, 0));
-                        //Console.WriteLine(inputs+" inputs");
+                        //Console.WriteLine(inputs+" inputs: ");
                         while (inputs > states.Count)
                         {
                             AddBinding();
@@ -103,16 +114,36 @@ namespace NetKeyServerGUI
                         {
                             int state = BitConverter.ToInt32(bytes, 4 + 4 * i);
 
-                            bool cKeyState = states[i];
-                            if (cKeyState != (state != 0))
+                            
+                            int cKeyState = states[i];
+                            states[i] = state;
+                            if (bindings[i].inputType == 0)
                             {
-                                states[i] = (state != 0);
-                                if (bindings[i].vKey != Keys.VirtualKeyStates.VK_NONE)
+                                //Console.WriteLine("Input "+i+": " + state + ", ");
+                                /*
+                                if (cKeyState != state)
                                 {
-                                    keybd_event((byte)bindings[i].vKey, 0, state == 0 ? KEYEVENTF_KEYUP : KEYEVENTF_KEYDOWN, 0);
-                                }
+                                    states[i] = state;
+                                    if (bindings[i].vKey != Keys.VirtualKeyStates.VK_NONE)
+                                    {*/
+                                SetKeyState((int)bindings[i].vKey, state != 0);
+                                    /*}
+                                }*/
+                            } else if (bindings[i].inputType == 1)
+                            {
+                                short slider1 = (short)((state & 0xFFFF0000) >> 16);
+                                short slider2 = (short)(state & 0xFFFF);
+                                Console.WriteLine("Slider " + i + ": " + state);
+                                //Console.WriteLine("Slider " + i + ": " + slider1 + ":"+slider2+", ");
+
+                                SetKeyState((int)bindings[i].vKeyT1L, slider1 < 0);
+                                SetKeyState((int)bindings[i].vKeyT2L, slider2 < 0);
+                                SetKeyState((int)bindings[i].vKeyT1R, slider1 > 0);
+                                SetKeyState((int)bindings[i].vKeyT2R, slider2 > 0);
                             }
+                            
                         }
+                        //Console.Write("\r");
                         //Thread.Sleep(1);
                     }
                 }
@@ -133,7 +164,19 @@ namespace NetKeyServerGUI
                     {
                         for (int x = 0; x != bindings.Count; x++)
                         {
-                            bindings[x].pressedIndicator.Fill = states[x] ? Brushes.Red : Brushes.White;
+                            if (bindings[x].inputType == 0)
+                            {
+                                bindings[x].pressedIndicator.Fill = states[x] != 0 ? Brushes.Red : Brushes.White;
+                            } else if (bindings[x].inputType == 1)
+                            {
+                                short slider1 = (short)((states[x] & 0xFFFF0000) >> 16);
+                                short slider2 = (short)(states[x] & 0xFFFF);
+
+                                bindings[x].pressedIndicatorT1LSlide.Fill = (slider1 < 0) ? Brushes.Red : Brushes.White;
+                                bindings[x].pressedIndicatorT1RSlide.Fill = (slider1 > 0) ? Brushes.Red : Brushes.White;
+                                bindings[x].pressedIndicatorT2LSlide.Fill = (slider2 < 0) ? Brushes.Red : Brushes.White;
+                                bindings[x].pressedIndicatorT2RSlide.Fill = (slider2 > 0) ? Brushes.Red : Brushes.White;
+                            }
                         }
                     });
                     Thread.Sleep(4);

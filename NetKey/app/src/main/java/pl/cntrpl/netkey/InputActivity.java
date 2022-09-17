@@ -46,7 +46,11 @@ public class InputActivity extends Activity {
 
         Bundle bndl = getIntent().getBundleExtra("pl.cntrpl.netkey");
         ip = bndl.getString("ipaddr");
-        port = Integer.parseInt(bndl.getString("port"));
+        try {
+            port = Integer.parseInt(bndl.getString("port"));
+        } catch (Exception e){
+            port = 5555;
+        }
         customInputs = ConfigActivity.customInputs;
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);

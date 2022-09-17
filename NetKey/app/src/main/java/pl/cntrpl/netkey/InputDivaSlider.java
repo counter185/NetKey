@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.text.method.Touch;
+import android.util.Log;
 
 public class InputDivaSlider extends CustomInput {
 
@@ -72,7 +73,8 @@ public class InputDivaSlider extends CustomInput {
                 lastPos[tID] = touchX;
                 states[tID] = 0;
             } else {
-                states[tID] = (short)(255 * (touchX - lastPos[tID]));
+                states[tID] = (short)(255 * ((touchX - lastPos[tID])/0.2f));
+                //Log.d("divaslider", "Setting state to " + states[tID] + ", diff: " + (touchX - lastPos[tID]));
                 lastPos[tID] = touchX;
             }
         }
@@ -81,14 +83,16 @@ public class InputDivaSlider extends CustomInput {
     @Override
     public int GetState() {
         short part1 = lastStateT1;
-        short part2 = lastStateT1;
-        return part1 << 16 | part2;
+        short part2 = lastStateT2;
+        int ret = ((int)part1 << 16) | part2;
+        //Log.d("divaslider", "Sending int: " + ret);
+        return ret;
     }
 
     @Override
     public void NextTick() {
         for (int x = 0; x != 2; x++){
-            if (x <= tapsThisTick){
+            if (tapsThisTick <= x){
                 states[x] = 0;
             }
         }
