@@ -30,6 +30,8 @@ public class ConfigActivity extends Activity {
         LinearLayout colLayout = findViewById(R.id.allRows);
         colLayout.removeAllViewsInLayout();
 
+        final float scale = getResources().getDisplayMetrics().density;
+
         for (int x = 0; x != inputs.size(); x++){
             TextView txt = new TextView(this);
             txt.setText("Row " + (x+1));
@@ -40,6 +42,7 @@ public class ConfigActivity extends Activity {
             nLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             LinearLayout.LayoutParams ltParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams ltParams2 = new LinearLayout.LayoutParams((int)(100*scale*0.5f), LinearLayout.LayoutParams.WRAP_CONTENT);
             ltParams.weight = 1;
             for (int y = 0; y != inputs.get(x).size(); y++){
                 Button nBtn = new Button(this);
@@ -59,8 +62,8 @@ public class ConfigActivity extends Activity {
             }
             Button nPlusBtn = new Button(this);
             Button nMinusBtn = new Button(this);
-            nPlusBtn.setLayoutParams(ltParams);
-            nMinusBtn.setLayoutParams(ltParams);
+            nPlusBtn.setLayoutParams(ltParams2);
+            nMinusBtn.setLayoutParams(ltParams2);
             nPlusBtn.setText("+");
             nMinusBtn.setText("-");
             int a = x;
@@ -127,13 +130,14 @@ public class ConfigActivity extends Activity {
                 bndl.putString("port", ((EditText)findViewById(R.id.editTextPort)).getText().toString());
                 switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
                 customInputs = new ArrayList<CustomInput>();
-                for (int x = 0; x != inputs.size(); x++){
+                customInputs.add(new InputDivaSlider(0,1,3));   //TODO: only for debug
+                /*for (int x = 0; x != inputs.size(); x++){
                     for (int y = 0; y != inputs.get(x).size(); y++) {
                         if (inputs.get(x).get(y)) {
                             customInputs.add(new InputButton(inputs.get(x).size()*x+ y, inputs.get(x).size(), inputs.size()));
                         }
                     }
-                }
+                }*/
                 startActivity(switchActivityIntent);
             }
         });

@@ -49,7 +49,7 @@ public class InputButton extends CustomInput {
     }
 
     @Override
-    public void TouchDownAt(float touchX, float touchY) {
+    public void TouchDownAt(float touchX, float touchY, int tID) {
 
     }
 
@@ -59,7 +59,7 @@ public class InputButton extends CustomInput {
     }
 
     @Override
-    public void UpdateState(float touchX, float touchY) {
+    public void UpdateState(float touchX, float touchY, int tID) {
         state = TouchInBound(touchX, touchY);
         lastState = state;
     }

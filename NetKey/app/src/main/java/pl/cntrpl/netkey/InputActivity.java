@@ -150,7 +150,7 @@ public class InputActivity extends Activity {
             float py = motionEvent.getY(x);
             for (CustomInput inp : customInputs){
                 if (inp.TouchInBound(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight())){
-                    inp.UpdateState(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight());
+                    inp.UpdateState(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight(), x);
                 }
             }
 

@@ -19,9 +19,9 @@ public abstract class CustomInput {
 
     public abstract void Render(Canvas a, Paint b);
     public abstract boolean TouchInBound(float x, float y);
-    public abstract void TouchDownAt(float touchX, float touchY);
+    public abstract void TouchDownAt(float touchX, float touchY, int tID);
     public abstract void AllTouchesUp();
-    public abstract void UpdateState(float touchX, float touchY);
+    public abstract void UpdateState(float touchX, float touchY, int tID);
     public abstract int GetState();
     public abstract void NextTick();
 
