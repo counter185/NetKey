@@ -67,16 +67,17 @@ public class InputDivaSlider extends CustomInput {
 
     @Override
     public void UpdateState(float touchX, float touchY, int tID) {
-        if (tID < 2) {
-            tapsThisTick++;
-            if (tapsLastTick <= tID){
-                lastPos[tID] = touchX;
-                states[tID] = 0;
+        if (tapsThisTick < 2) {
+
+            if (tapsLastTick <= tapsThisTick){
+                lastPos[tapsThisTick] = touchX;
+                states[tapsThisTick] = 0;
             } else {
-                states[tID] = (short)(255 * ((touchX - lastPos[tID])/0.2f));
-                //Log.d("divaslider", "Setting state to " + states[tID] + ", diff: " + (touchX - lastPos[tID]));
-                lastPos[tID] = touchX;
+                states[tapsThisTick] = (short)(255 * ((touchX - lastPos[tapsThisTick])/0.2f));
+                //Log.d("divaslider", "Setting state to " + states[tapsThisTick] + ", diff: " + (touchX - lastPos[tapsThisTick]));
+                lastPos[tapsThisTick] = touchX;
             }
+            tapsThisTick++;
         }
     }
 
