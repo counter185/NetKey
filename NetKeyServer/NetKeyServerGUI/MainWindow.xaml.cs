@@ -49,6 +49,12 @@ namespace NetKeyServerGUI
             bindingsList.Items.Add(new InputConfigList());*/
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Environment.Exit(0);
+        }
+
         static UInt32 ReverseBytes(UInt32 value)
         {
             return (value & 0x000000FFU) << 24 | (value & 0x0000FF00U) << 8 |
@@ -107,7 +113,7 @@ namespace NetKeyServerGUI
                                 }
                             }
                         }
-                        Thread.Sleep(1);
+                        //Thread.Sleep(1);
                     }
                 }
                 catch (Exception e)
