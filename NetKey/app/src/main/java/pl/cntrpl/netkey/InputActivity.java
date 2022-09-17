@@ -13,6 +13,7 @@ import android.text.method.Touch;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,14 +24,8 @@ import java.util.List;
 
 public class InputActivity extends Activity {
 
-    private Bitmap mBitmap = null;
-    private Bitmap mainFramebuffer = null;
-    private Canvas mCanvas = null;
-    private Canvas fbCanbas = null;
     private Paint mPaint = null;
-    private Paint fbPaint = new Paint();
-
-    public ImageView img;
+    public int fbW, fbH;
 
     public boolean paused = false;
     public Thread renderThread = null;
@@ -39,6 +34,7 @@ public class InputActivity extends Activity {
     public String ip ="";
     public int port = 5555;
 
+    public SurfaceView nSrfc = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +49,8 @@ public class InputActivity extends Activity {
         }
         customInputs = ConfigActivity.customInputs;
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+        nSrfc = new InputSurfaceView(this, this, android.os.Build.VERSION.SDK_INT < 21);
+        setContentView(nSrfc);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -84,7 +81,7 @@ public class InputActivity extends Activity {
         super.onDestroy();
     }
 
-    public void Redraw(){
+    /*public void Redraw(){
 
         //long drawStart = System.currentTimeMillis();
         mCanvas.drawColor(0xFF000000);
@@ -107,12 +104,12 @@ public class InputActivity extends Activity {
         if (RendererThread.canDoMultiThreadedRender) {
             img.invalidate();
         }
-    }
+    }*/
 
     public List<CustomInput> customInputs = new ArrayList<CustomInput>();
 
     private int lastTs = 0;
-    private List<TouchState> tStates = new ArrayList<TouchState>();
+    public List<TouchState> tStates = new ArrayList<TouchState>();
     long lastUpd = 0;
     int evts = 0;
     @Override
@@ -153,8 +150,8 @@ public class InputActivity extends Activity {
             float px = motionEvent.getX(x);
             float py = motionEvent.getY(x);
             for (CustomInput inp : customInputs){
-                if (inp.TouchInBound(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight())){
-                    inp.UpdateState(px/mainFramebuffer.getWidth(), py/mainFramebuffer.getHeight(), x);
+                if (inp.TouchInBound(px/fbW, py/fbH)){
+                    inp.UpdateState(px/fbW, py/fbH, x);
                 }
             }
 
@@ -173,10 +170,6 @@ public class InputActivity extends Activity {
         for (CustomInput inp : customInputs){
             inp.NextTick();
         }
-        if (!RendererThread.canDoMultiThreadedRender && (System.currentTimeMillis() > lastUpd+32 || lastTs == 0)){
-            img.invalidate();
-            lastUpd = System.currentTimeMillis();
-        }
         return true;
     }
 
@@ -190,22 +183,26 @@ public class InputActivity extends Activity {
         this.getWindowManager()
                 .getDefaultDisplay()
                 .getMetrics(displayMetrics);
+        fbW = displayMetrics.widthPixels;
+        fbH = displayMetrics.heightPixels;
 
-        img = this.findViewById(R.id.mainCanvas);
+        /*img = this.findViewById(R.id.mainCanvas);
         mBitmap = Bitmap.createBitmap(displayMetrics.widthPixels, displayMetrics.heightPixels, Bitmap.Config.ARGB_8888);
         mainFramebuffer = Bitmap.createBitmap(displayMetrics.widthPixels, displayMetrics.heightPixels, Bitmap.Config.ARGB_8888);
-        mCanvas = new Canvas(mBitmap);
-        fbCanbas = new Canvas(mainFramebuffer);
+        //mCanvas = new Canvas(mBitmap);
+        //fbCanbas = new Canvas(mainFramebuffer);
         mCanvas.drawColor(0xFF000000);
-        img.setImageBitmap(mainFramebuffer);
+        img.setImageBitmap(mainFramebuffer);*/
 
         mPaint = new Paint();
 
-        Redraw();
-        renderThread = new RendererThread(this);
-        netPostThread = new InputConnectionThread(this);
+        //Redraw();
+        if (android.os.Build.VERSION.SDK_INT >= 21){
+            renderThread = new RendererThread(this);
+            renderThread.start();
+        }
 
-        renderThread.start();
+        netPostThread = new InputConnectionThread(this);
         netPostThread.start();
     }
 

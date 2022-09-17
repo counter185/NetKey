@@ -2,6 +2,7 @@ package pl.cntrpl.netkey;
 
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 
 public class RendererThread extends Thread{
 
@@ -15,12 +16,6 @@ public class RendererThread extends Thread{
     @Override
     public void run()
     {
-        try {
-            caller.img.invalidate();
-        } catch (Exception e){
-            canDoMultiThreadedRender = false;
-        }
-
         while (true) {
             if (caller.isDestroyed()){
                 break;
@@ -29,8 +24,9 @@ public class RendererThread extends Thread{
                 //float startTime = System.currentTimeMillis();
 
                 //rendercode here
+                caller.nSrfc.invalidate();
 
-                caller.Redraw();
+                //caller.Redraw();
                 //caller.img.invalidate();
 
                 //float endTime = System.currentTimeMillis();
