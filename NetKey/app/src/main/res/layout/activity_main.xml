@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InputActivity"
-    android:splitMotionEvents="true"
-    android:theme="@style/Theme.Design.NoActionBar">
+    android:splitMotionEvents="true">
 
     <ImageView
         android:id="@+id/mainCanvas"

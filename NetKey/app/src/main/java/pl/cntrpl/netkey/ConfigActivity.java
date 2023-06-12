@@ -143,20 +143,8 @@ public class ConfigActivity extends Activity {
                 Bundle bndl = new Bundle();
                 bndl.putString("ipaddr", ((EditText)findViewById(R.id.editTextIP)).getText().toString());
                 bndl.putString("port", ((EditText)findViewById(R.id.editTextPort)).getText().toString());
+                bndl.putParcelable("inputconf", inputs);
                 switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
-                customInputs = new ArrayList<CustomInput>();
-                for (int x = 0; x != inputs.NRows(); x++){
-                    for (int y = 0; y != inputs.NCols(x); y++) {
-                        int inputID = inputs.GetInputAt(x,y);
-                        CustomInput addInput =
-                                inputID == 1 ? new InputButton(inputs.NCols(x)*x+ y, inputs.NCols(x), inputs.NRows())
-                                : inputID == 2 ? new InputDivaSlider(inputs.NCols(x)*x+ y, inputs.NCols(x), inputs.NRows())
-                                : null;
-                        if (addInput != null) {
-                            customInputs.add(addInput);
-                        }
-                    }
-                }
                 startActivity(switchActivityIntent);
             }
         });

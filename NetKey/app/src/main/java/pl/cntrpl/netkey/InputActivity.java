@@ -1,6 +1,9 @@
 package pl.cntrpl.netkey;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import android.app.Activity;
 import android.graphics.Paint;
@@ -15,7 +18,10 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.cntrpl.netkey.configuration.InputConfiguration;
 import pl.cntrpl.netkey.input.CustomInput;
+import pl.cntrpl.netkey.input.InputButton;
+import pl.cntrpl.netkey.input.InputDivaSlider;
 
 public class InputActivity extends Activity {
 
@@ -31,6 +37,29 @@ public class InputActivity extends Activity {
 
     public SurfaceView nSrfc = null;
 
+    public List<CustomInput> customInputs = new ArrayList<CustomInput>();
+
+    private int lastTs = 0;
+    public List<TouchState> tStates = new ArrayList<TouchState>();
+    long lastUpd = 0;
+    int evts = 0;
+
+    private void generateInputsList(InputConfiguration inputs){
+        customInputs = new ArrayList<>();
+        for (int x = 0; x != inputs.NRows(); x++){
+            for (int y = 0; y != inputs.NCols(x); y++) {
+                int inputID = inputs.GetInputAt(x,y);
+                CustomInput addInput =
+                        inputID == 1 ? new InputButton(inputs.NCols(x)*x+ y, inputs.NCols(x), inputs.NRows())
+                                : inputID == 2 ? new InputDivaSlider(inputs.NCols(x)*x+ y, inputs.NCols(x), inputs.NRows())
+                                : null;
+                if (addInput != null) {
+                    customInputs.add(addInput);
+                }
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,21 +71,16 @@ public class InputActivity extends Activity {
         } catch (Exception e){
             port = 5555;
         }
-        customInputs = ConfigActivity.customInputs;
+        //customInputs = ConfigActivity.customInputs;
+        generateInputsList(bndl.getParcelable("inputconf"));
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //this.requestWindowFeature(Window.FEATURE_ACTION_BAR);
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).hide(WindowInsetsCompat.Type.systemBars());
         nSrfc = new InputSurfaceView(this, this, android.os.Build.VERSION.SDK_INT < 21);
         setContentView(nSrfc);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        /*customInputs.add(new InputButton(0,7,1));
-        customInputs.add(new InputButton(1,7,1));
-        customInputs.add(new InputButton(2,7,1));
-        customInputs.add(new InputButton(3,7,1));
-        customInputs.add(new InputButton(4,7,1));
-        customInputs.add(new InputButton(5,7,1));
-        customInputs.add(new InputButton(6,7,1));*/
     }
 
     @Override
@@ -100,13 +124,6 @@ public class InputActivity extends Activity {
             img.invalidate();
         }
     }*/
-
-    public List<CustomInput> customInputs = new ArrayList<CustomInput>();
-
-    private int lastTs = 0;
-    public List<TouchState> tStates = new ArrayList<TouchState>();
-    long lastUpd = 0;
-    int evts = 0;
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 

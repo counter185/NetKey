@@ -1,14 +1,20 @@
 package pl.cntrpl.netkey.configuration;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class InputConfiguration {
+public class InputConfiguration implements Parcelable{
     public List<List<Integer>> configuration;
 
     public InputConfiguration(){
         configuration = new ArrayList<List<Integer>>();
+    }
+    public InputConfiguration(List<List<Integer>> newConfig) {
+        this.configuration = newConfig;
     }
 
     public int NRows(){
@@ -55,4 +61,36 @@ public class InputConfiguration {
         }
         return false;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(NRows());
+        for (List<Integer> a : configuration){
+            parcel.writeList(a);
+        }
+    }
+
+    public static Creator<InputConfiguration> CREATOR = new Creator<InputConfiguration>() {
+
+        @Override
+        public InputConfiguration createFromParcel(Parcel source) {
+            InputConfiguration a = new InputConfiguration();
+            int nrows = source.readInt();
+            while (nrows --> 0){
+                a.configuration.add(source.readArrayList(null));
+            }
+            return a;
+        }
+
+        @Override
+        public InputConfiguration[] newArray(int size) {
+            return new InputConfiguration[size];
+        }
+
+    };
 }

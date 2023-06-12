@@ -43,7 +43,7 @@ public class InputSurfaceView extends SurfaceView {
         canvas.drawColor(0xFF000000);
         mPaint.setColor(0xFFFFFFFF);
         canvas.drawLine(50,50,100,100, mPaint);
-        for (CustomInput inp : customInputs){
+        for (CustomInput inp : caller.customInputs){
             inp.Render(canvas, mPaint);
         }
 
