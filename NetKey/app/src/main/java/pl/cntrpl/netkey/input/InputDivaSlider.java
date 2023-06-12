@@ -1,10 +1,7 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.input;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
-import android.text.method.Touch;
-import android.util.Log;
 
 public class InputDivaSlider extends CustomInput {
 
@@ -32,6 +29,11 @@ public class InputDivaSlider extends CustomInput {
 
     public InputDivaSlider(float x, float y, float w, float h) {
         super(x, y, w, h);
+    }
+
+    @Override
+    public char GetSaveID() {
+        return 'S';
     }
 
     @Override

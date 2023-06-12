@@ -1,4 +1,4 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.input;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -16,6 +16,8 @@ public abstract class CustomInput {
         width = w;
         height = h;
     }
+
+    public abstract char GetSaveID();
 
     public abstract void Render(Canvas a, Paint b);
     public abstract boolean TouchInBound(float x, float y);

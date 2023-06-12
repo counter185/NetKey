@@ -4,38 +4,40 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import pl.cntrpl.netkey.configuration.InputConfiguration;
+import pl.cntrpl.netkey.input.CustomInput;
+import pl.cntrpl.netkey.input.InputButton;
+import pl.cntrpl.netkey.input.InputDivaSlider;
 
 public class ConfigActivity extends Activity {
 
-    public List<List<Integer>> inputs = new ArrayList<List<Integer>>();
+    public InputConfiguration inputs = new InputConfiguration();
 
     public void CreateRows(){
 
         TextView rowText = findViewById(R.id.textRows);
-        rowText.setText("Rows: " + inputs.size());
+        rowText.setText("Rows: " + inputs.NRows());
 
         LinearLayout colLayout = findViewById(R.id.allRows);
         colLayout.removeAllViewsInLayout();
 
         final float scale = getResources().getDisplayMetrics().density;
 
-        for (int x = 0; x != inputs.size(); x++){
-            TextView txt = new TextView(this);
-            txt.setText("Row " + (x+1));
-            colLayout.addView(txt);
+        for (int x = 0; x != inputs.NRows(); x++){
+            //TextView txt = new TextView(this);
+            //txt.setText("Row " + (x+1));
+            //colLayout.addView(txt);
 
             LinearLayout nLayout = new LinearLayout(this);
             nLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -44,12 +46,12 @@ public class ConfigActivity extends Activity {
             LinearLayout.LayoutParams ltParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             LinearLayout.LayoutParams ltParams2 = new LinearLayout.LayoutParams((int)(100*scale*0.5f), LinearLayout.LayoutParams.WRAP_CONTENT);
             ltParams.weight = 1;
-            for (int y = 0; y != inputs.get(x).size(); y++){
+            for (int y = 0; y != inputs.NCols(x); y++){
                 Button nBtn = new Button(this);
                 nBtn.setLayoutParams(ltParams);
                 int a = x;
                 int b = y;
-                int st = inputs.get(a).get(b);
+                int st = inputs.GetInputAt(a,b);
                 nBtn.setText(st == 0 ? "OFF"
                         : st == 1 ? "BTN"
                         : st == 2 ? "SLIDER"
@@ -57,10 +59,10 @@ public class ConfigActivity extends Activity {
                 nBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int currentState = inputs.get(a).get(b);
+                        int currentState = inputs.GetInputAt(a,b);
                         currentState++;
                         currentState%=3;
-                        inputs.get(a).set(b, currentState);
+                        inputs.SetInputAt(a, b, currentState);
                         nBtn.setText(currentState == 0 ? "OFF"
                                 : currentState == 1 ? "BTN"
                                 : currentState == 2 ? "SLIDER"
@@ -79,8 +81,7 @@ public class ConfigActivity extends Activity {
             nPlusBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (inputs.get(a).size() != 100){
-                        inputs.get(a).add(1);
+                    if (inputs.NewColAt(a)){
                         CreateRows();
                     }
                 }
@@ -88,8 +89,7 @@ public class ConfigActivity extends Activity {
             nMinusBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (inputs.get(a).size() != 1){
-                        inputs.get(a).remove(inputs.get(a).size()-1);
+                    if (inputs.RemoveLastColAt(a)){
                         CreateRows();
                     }
                 }
@@ -104,25 +104,31 @@ public class ConfigActivity extends Activity {
 
     public static List<CustomInput> customInputs = null;
     public static int pollRate = 2;
+
+    public File configDir;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
 
-        inputs.add(new ArrayList<Integer>(Arrays.asList(1,1,1,1)));
+        configDir = new File(getExternalFilesDir(null), "/input_configurations/");
+        if (!configDir.exists()){
+            configDir.mkdir();
+        }
+
+        inputs.NewRow();
 
         ((Button)findViewById(R.id.buttonRowsUp)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                inputs.add(new ArrayList<Integer>(Arrays.asList(1,1,1,1)));
+                inputs.NewRow();
                 CreateRows();
             }
         });
         ((Button)findViewById(R.id.buttonRowsDown)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (inputs.size() != 1){
-                    inputs.remove(inputs.size()-1);
+                if (inputs.RemoveLastRow()){
                     CreateRows();
                 }
             }
@@ -139,12 +145,15 @@ public class ConfigActivity extends Activity {
                 bndl.putString("port", ((EditText)findViewById(R.id.editTextPort)).getText().toString());
                 switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
                 customInputs = new ArrayList<CustomInput>();
-                for (int x = 0; x != inputs.size(); x++){
-                    for (int y = 0; y != inputs.get(x).size(); y++) {
-                        if (inputs.get(x).get(y) == 1) {
-                            customInputs.add(new InputButton(inputs.get(x).size()*x+ y, inputs.get(x).size(), inputs.size()));
-                        } else if (inputs.get(x).get(y) == 2){
-                            customInputs.add(new InputDivaSlider(inputs.get(x).size()*x+ y, inputs.get(x).size(), inputs.size()));
+                for (int x = 0; x != inputs.NRows(); x++){
+                    for (int y = 0; y != inputs.NCols(x); y++) {
+                        int inputID = inputs.GetInputAt(x,y);
+                        CustomInput addInput =
+                                inputID == 1 ? new InputButton(inputs.NCols(x)*x+ y, inputs.NCols(x), inputs.NRows())
+                                : inputID == 2 ? new InputDivaSlider(inputs.NCols(x)*x+ y, inputs.NCols(x), inputs.NRows())
+                                : null;
+                        if (addInput != null) {
+                            customInputs.add(addInput);
                         }
                     }
                 }

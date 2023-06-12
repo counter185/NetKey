@@ -1,9 +1,7 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.input;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
-import android.text.method.Touch;
 
 public class InputButton extends CustomInput {
 
@@ -27,6 +25,11 @@ public class InputButton extends CustomInput {
 
     public InputButton(float x, float y, float w, float h) {
         super(x, y, w, h);
+    }
+
+    @Override
+    public char GetSaveID(){
+        return 'B';
     }
 
     @Override

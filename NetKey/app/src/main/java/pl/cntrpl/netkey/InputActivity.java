@@ -1,26 +1,21 @@
 package pl.cntrpl.netkey;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.text.method.Touch;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import pl.cntrpl.netkey.input.CustomInput;
 
 public class InputActivity extends Activity {
 

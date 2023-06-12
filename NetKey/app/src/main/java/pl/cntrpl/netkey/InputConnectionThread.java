@@ -7,6 +7,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+import pl.cntrpl.netkey.input.CustomInput;
+
 public class InputConnectionThread extends Thread{
 
     public static final byte[] intToByteArray(int value) {
