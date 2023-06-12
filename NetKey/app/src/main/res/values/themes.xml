@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.NetKey" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.NetKey" parent="Theme.Material3.Dark">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -20,7 +20,7 @@
         <item name="android:windowFullscreen">true</item>
     </style>
   <!-- Base application theme. -->
-    <style name="Base.Theme.NetKey" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.NetKey" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>

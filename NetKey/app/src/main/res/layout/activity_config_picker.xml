@@ -17,7 +17,8 @@
             android:textSize="20sp" />
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
             <LinearLayout
                 android:id="@+id/config_item_list"
                 android:layout_width="match_parent"
@@ -25,4 +26,43 @@
                 android:orientation="vertical">
             </LinearLayout>
         </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <ImageView
+                android:layout_height="1px"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.98"
+                android:background="#A8A8A8"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/filesavebar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="File name:"
+                android:textSize="14sp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/fileedittext" />
+            <Button
+                android:id="@+id/filenameconfirmbtn"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+        </LinearLayout>
 </LinearLayout>

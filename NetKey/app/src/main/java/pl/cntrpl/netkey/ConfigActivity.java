@@ -1,6 +1,7 @@
 package pl.cntrpl.netkey;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,6 +24,9 @@ import pl.cntrpl.netkey.input.InputButton;
 import pl.cntrpl.netkey.input.InputDivaSlider;
 
 public class ConfigActivity extends Activity {
+
+    final int CONFIG_SAVE = 3000;
+    final int CONFIG_LOAD = 3001;
 
     public InputConfiguration inputs = new InputConfiguration();
 
@@ -115,6 +121,7 @@ public class ConfigActivity extends Activity {
         if (!configDir.exists()){
             configDir.mkdir();
         }
+        ConfigFilesIO.baseConfigFilesPath = configDir;
 
         inputs.NewRow();
 
@@ -138,6 +145,14 @@ public class ConfigActivity extends Activity {
         ((Button)findViewById(R.id.buttonConnect)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(bruh);
+
+                builder.setMessage("Connecting to " + ((EditText)findViewById(R.id.editTextIP)).getText().toString())
+                        .setTitle("Connecting...");
+                AlertDialog dialog = builder.create();*/
+
+
                 Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
                 pollRate = 17-((SeekBar)findViewById(R.id.sliderPollRate)).getProgress();
                 Bundle bndl = new Bundle();
@@ -154,18 +169,47 @@ public class ConfigActivity extends Activity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 ((TextView)findViewById(R.id.sliderPollRateText)).setText((1000/(17-i)) + "hz");
             }
-
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
 
+        ((Button)findViewById(R.id.buttonSaveConfFile)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(bruh, ConfigPickerActivity.class);
+                i.putExtra("saveprompt", true);
+                startActivityForResult(i, CONFIG_SAVE);
             }
-
+        });
+        ((Button)findViewById(R.id.buttonLoadConfFile)).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void onClick(View view) {
+                Intent i = new Intent(bruh, ConfigPickerActivity.class);
+                i.putExtra("saveprompt", false);
+                startActivityForResult(i, CONFIG_LOAD);
             }
         });
 
         CreateRows();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CONFIG_SAVE) {
+            if(resultCode == RESULT_OK) {
+                String strPath = data.getStringExtra("path");
+                System.out.println("Taken path: " + strPath);
+                ConfigFilesIO.WriteConfigToFile(new File(strPath), inputs);
+            }
+        }
+        else if (requestCode == CONFIG_LOAD) {
+            if(resultCode == RESULT_OK) {
+                String strPath = data.getStringExtra("path");
+                inputs = ConfigFilesIO.ReadConfigFromFile(new File(strPath));
+                CreateRows();
+            }
+        }
     }
 }

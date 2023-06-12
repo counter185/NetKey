@@ -5,7 +5,7 @@
 
     <uses-feature
         android:name="android.hardware.touchscreen.multitouch"
-        android:required="true" />
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -18,10 +18,11 @@
         android:theme="@style/Theme.NetKey">
         <activity
             android:name=".ConfigPickerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@android:style/Theme.Holo.NoActionBar"/>
         <activity
             android:name=".InputActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ConfigActivity"

@@ -13,6 +13,19 @@ import pl.cntrpl.netkey.configuration.InputConfiguration;
 
 public class ConfigFilesIO {
 
+    public static File baseConfigFilesPath;
+
+    public static List<File> getAllConfigFiles(){
+        File[] files = baseConfigFilesPath.listFiles();
+        List<File> ret = new ArrayList<>();
+        for (File a : files){
+            if (a.isFile() && a.getName().endsWith(".netkeyconf")){
+                ret.add(a);
+            }
+        }
+        return ret;
+    }
+
     public static boolean WriteConfigToFile(File target, InputConfiguration config) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(target))) {
             for (List<Integer> sublist : config.configuration) {
