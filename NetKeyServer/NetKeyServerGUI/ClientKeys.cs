@@ -11,6 +11,7 @@ namespace NetKeyServerGUI
         public int deviceID;
         public List<int> states = new List<int>();
         public List<byte> inputTypes = new List<byte>();
+        public List<KeyBinding> keyBindings = new List<KeyBinding>();
 
         public ClientKeys(int deviceID)
         {

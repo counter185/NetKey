@@ -62,6 +62,7 @@ namespace NetKeyServerGUI
                             }
                             keybinds.inputTypes.Add(btnType);
                             keybinds.states.Add(0);
+                            keybinds.keyBindings.Add(new KeyBinding());
                         }
                         devices.Add(connectionID, keybinds);
 
