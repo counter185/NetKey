@@ -2,7 +2,6 @@ package pl.cntrpl.netkey;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,16 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import pl.cntrpl.netkey.configuration.InputConfiguration;
-import pl.cntrpl.netkey.input.CustomInput;
-import pl.cntrpl.netkey.input.InputButton;
-import pl.cntrpl.netkey.input.InputDivaSlider;
 
 public class ConfigActivity extends Activity {
 
@@ -29,6 +21,9 @@ public class ConfigActivity extends Activity {
     final int CONFIG_LOAD = 3001;
 
     public InputConfiguration inputs = new InputConfiguration();
+
+    public File configDir;
+    public File appSettingsFile;
 
     public void CreateRows(){
 
@@ -108,20 +103,18 @@ public class ConfigActivity extends Activity {
         }
     }
 
-    //public static List<CustomInput> customInputs = null;
-    //public static int pollRate = 2;
-
-    public File configDir;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
 
+        appSettingsFile = new File(getExternalFilesDir(null), "/appsettings.ini");
         configDir = new File(getExternalFilesDir(null), "/input_configurations/");
         if (!configDir.exists()){
             configDir.mkdir();
         }
         ConfigFilesIO.baseConfigFilesPath = configDir;
+        ConfigFilesIO.ReadLastAppSettings(this, appSettingsFile);
 
         inputs.NewRow();
 
@@ -141,10 +134,12 @@ public class ConfigActivity extends Activity {
             }
         });
 
-        Context bruh = this;
+        ConfigActivity bruh = this;
         ((Button)findViewById(R.id.buttonConnect)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                ConfigFilesIO.SaveLastAppSettings(bruh, appSettingsFile);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(bruh);
 

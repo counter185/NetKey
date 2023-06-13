@@ -11,12 +11,12 @@ import pl.cntrpl.netkey.input.CustomInput;
 
 public class InputConnectionThread extends Thread{
 
-    public static final byte[] intToByteArray(int value) {
+    public static byte[] intToByteArray(int value) {
         return new byte[] {
-                (byte)(value >>> 24),
-                (byte)(value >>> 16),
+                (byte)value,
                 (byte)(value >>> 8),
-                (byte)value};
+                (byte)(value >>> 16),
+                (byte)(value >>> 24) };
     }
 
     public InputActivity caller;
@@ -31,13 +31,14 @@ public class InputConnectionThread extends Thread{
         byte[] buf = new byte[512];
         DatagramPacket udpPacket = new DatagramPacket(buf, 512, address, caller.port);
         try {
-            System.arraycopy(intToByteArray(caller.customInputs.size()), 0, buf, 0, 4);
+            System.arraycopy(intToByteArray(caller.connectionID), 0, buf, 0, 4);
+            System.arraycopy(intToByteArray(caller.customInputs.size()), 0, buf, 4, 4);
             //clientOut.writeInt(caller.customInputs.size());
             //Log.d("netinputthread","Sending size: " + caller.customInputs.size());
             int i = 0;
             for (CustomInput a : caller.customInputs){
                 //Log.d("netinputthread","Sending state");
-                System.arraycopy(intToByteArray(a.GetState()), 0, buf, 4+i*4, 4);
+                System.arraycopy(intToByteArray(a.GetState()), 0, buf, 8+i*4, 4);
                 //clientOut.writeInt(a.GetState());
                 i++;
             }

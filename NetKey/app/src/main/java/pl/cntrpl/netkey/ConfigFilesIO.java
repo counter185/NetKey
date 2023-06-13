@@ -1,5 +1,9 @@
 package pl.cntrpl.netkey;
 
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -64,5 +68,38 @@ public class ConfigFilesIO {
         }
 
         return new InputConfiguration(integerList);
+    }
+
+    public static void SaveLastAppSettings(ConfigActivity configActivity, File target){
+        try {
+            FileWriter writer = new FileWriter(target, false);
+            writer.write("[NetKeyConfig]\n");
+            writer.write("IP="+((EditText)configActivity.findViewById(R.id.editTextIP)).getText().toString()+"\n");
+            writer.write("port="+((EditText)configActivity.findViewById(R.id.editTextPort)).getText().toString()+"\n");
+            writer.write("pollRate="+((SeekBar)configActivity.findViewById(R.id.sliderPollRate)).getProgress()+"\n");
+            writer.close();
+
+        } catch (IOException e) {
+            Toast.makeText(configActivity, "Unable to save app settings!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void ReadLastAppSettings(ConfigActivity configActivity, File file) {
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("IP=")) {
+                        ((EditText) configActivity.findViewById(R.id.editTextIP)).setText(line.substring(line.indexOf('=') + 1));
+                    } else if (line.startsWith("port=")) {
+                        ((EditText) configActivity.findViewById(R.id.editTextPort)).setText(line.substring(line.indexOf('=') + 1));
+                    } else if (line.startsWith("pollRate=")) {
+                        ((SeekBar) configActivity.findViewById(R.id.sliderPollRate)).setProgress(Integer.parseInt(line.substring(line.indexOf('=') + 1)));
+                    }
+                }
+            } catch (Exception e) {
+                Toast.makeText(configActivity, "Unable to read app settings!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

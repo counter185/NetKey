@@ -103,7 +103,8 @@ namespace NetKeyServerGUI
                     {
                         //Console.WriteLine("Next frame");
                         bytes = listener.Receive(ref groupEP);
-                        int inputs = (int)ReverseBytes((uint)BitConverter.ToInt32(bytes, 0));
+                        int connID = BitConverter.ToInt32(bytes, 0);
+                        int inputs = BitConverter.ToInt32(bytes, 4);
                         //Console.WriteLine(inputs+" inputs: ");
                         while (inputs > states.Count)
                         {
@@ -111,7 +112,7 @@ namespace NetKeyServerGUI
                         }
                         for (int i = 0; i < inputs; i++)
                         {
-                            int state = BitConverter.ToInt32(bytes, 4 + 4 * i);
+                            int state = BitConverter.ToInt32(bytes, 8 + 4 * i);
 
                             
                             int cKeyState = states[i];
