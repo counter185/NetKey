@@ -1,7 +1,5 @@
 package pl.cntrpl.netkey;
 
-import static pl.cntrpl.netkey.ConfigActivity.customInputs;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;

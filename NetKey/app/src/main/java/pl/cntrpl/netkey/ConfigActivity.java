@@ -108,8 +108,8 @@ public class ConfigActivity extends Activity {
         }
     }
 
-    public static List<CustomInput> customInputs = null;
-    public static int pollRate = 2;
+    //public static List<CustomInput> customInputs = null;
+    //public static int pollRate = 2;
 
     public File configDir;
     @Override
@@ -146,21 +146,32 @@ public class ConfigActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                /*AlertDialog.Builder builder = new AlertDialog.Builder(bruh);
+                AlertDialog.Builder builder = new AlertDialog.Builder(bruh);
 
                 builder.setMessage("Connecting to " + ((EditText)findViewById(R.id.editTextIP)).getText().toString())
                         .setTitle("Connecting...");
-                AlertDialog dialog = builder.create();*/
+                AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.show();
+
+                new ThreadConnectToServer(
+                        ((EditText)findViewById(R.id.editTextIP)).getText().toString(),
+                        ((EditText)findViewById(R.id.editTextPort)).getText().toString(),
+                        inputs,
+                        dialog,
+                        bruh,
+                        17-((SeekBar)findViewById(R.id.sliderPollRate)).getProgress()
+                ).start();
 
 
-                Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
+                /*Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
                 pollRate = 17-((SeekBar)findViewById(R.id.sliderPollRate)).getProgress();
                 Bundle bndl = new Bundle();
                 bndl.putString("ipaddr", ((EditText)findViewById(R.id.editTextIP)).getText().toString());
                 bndl.putString("port", ((EditText)findViewById(R.id.editTextPort)).getText().toString());
                 bndl.putParcelable("inputconf", inputs);
                 switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
-                startActivity(switchActivityIntent);
+                startActivity(switchActivityIntent);*/
             }
         });
 

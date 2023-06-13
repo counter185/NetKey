@@ -62,7 +62,7 @@ public class InputConnectionThread extends Thread{
                             break;
                         }
                         WriteOut(socket);
-                        Thread.sleep(ConfigActivity.pollRate);
+                        Thread.sleep(caller.pollRate);
                     }
                 }
             } catch (Exception exception) {

@@ -37,6 +37,9 @@ namespace NetKeyServerGUI
 
         public bool[] vKeyStates = new bool[0xFF];
 
+        public TCPNetKeyClientResponder keyMapper;
+        public int port = 5555;
+
         public void SetKeyState(int key, bool state)
         {
             if (vKeyStates[key] != state)
@@ -52,12 +55,8 @@ namespace NetKeyServerGUI
 
             new Thread(ThreadUDPServer).Start();
             new Thread(ThreadUpdater).Start();
+            keyMapper = new TCPNetKeyClientResponder(port);
 
-
-            /*bindingsList.Items.Add(new InputConfigList());
-            bindingsList.Items.Add(new InputConfigList());
-            bindingsList.Items.Add(new InputConfigList());
-            bindingsList.Items.Add(new InputConfigList());*/
         }
 
         protected override void OnClosed(EventArgs e)
@@ -88,8 +87,8 @@ namespace NetKeyServerGUI
 
         public void ThreadUDPServer()
         {
-            UdpClient listener = new UdpClient(5555);
-            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, 5555);
+            UdpClient listener = new UdpClient(port);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
 
             while (true)
             {

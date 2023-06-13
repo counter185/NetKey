@@ -34,6 +34,8 @@ public class InputActivity extends Activity {
 
     public String ip ="";
     public int port = 5555;
+    public int pollRate;
+    public int connectionID;
 
     public SurfaceView nSrfc = null;
 
@@ -71,6 +73,8 @@ public class InputActivity extends Activity {
         } catch (Exception e){
             port = 5555;
         }
+        pollRate = bndl.getInt("pollrate");
+        connectionID = bndl.getInt("connid");
         //customInputs = ConfigActivity.customInputs;
         generateInputsList(bndl.getParcelable("inputconf"));
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
