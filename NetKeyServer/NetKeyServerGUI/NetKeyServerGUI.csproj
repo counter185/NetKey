@@ -57,8 +57,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ClientKeys.cs" />
+    <Compile Include="DeviceListItem.xaml.cs">
+      <DependentUpon>DeviceListItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="KeyBinding.cs" />
     <Compile Include="TCPNetKeyClientResponder.cs" />
+    <Page Include="DeviceListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DevicePropertiesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

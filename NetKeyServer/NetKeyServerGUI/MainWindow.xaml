@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="287" Width="410">
     <Grid>
-        <ListBox x:Name="bindingsList" Margin="10,69,10,10"/>
+        <ListBox x:Name="devicesList" Margin="10,69,10,10"/>
 
     </Grid>
 </Window>

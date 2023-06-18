@@ -54,8 +54,13 @@ namespace NetKeyServerGUI
             InitializeComponent();
 
             new Thread(ThreadUDPServer).Start();
-            new Thread(ThreadUpdater).Start();
-            keyMapper = new TCPNetKeyClientResponder(port);
+            //new Thread(ThreadUpdater).Start();
+
+            devicesList.PreviewMouseDoubleClick += (sender, mouseButtonEvent) =>
+            {
+            };
+
+            keyMapper = new TCPNetKeyClientResponder(port, this);
 
         }
 
@@ -71,7 +76,7 @@ namespace NetKeyServerGUI
                 (value & 0x00FF0000U) >> 8 | (value & 0xFF000000U) >> 24;
         }
 
-        public void AddBinding()
+        /*public void AddBinding()
         {
             Dispatcher.Invoke(delegate
             {
@@ -80,7 +85,7 @@ namespace NetKeyServerGUI
                 bindings[bindings.Count - 1].keyLabel.Content = "Key " + bindings.Count;
                 bindingsList.Items.Add(bindings[bindings.Count - 1]);
             });
-        }
+        }*/
 
         public List<int> states = new List<int>();
         public List<InputConfigList> bindings = new List<InputConfigList>();
@@ -106,18 +111,30 @@ namespace NetKeyServerGUI
                         int connID = BitConverter.ToInt32(bytes, 0);
                         int inputs = BitConverter.ToInt32(bytes, 4);
                         //Console.WriteLine(inputs+" inputs: ");
-                        while (inputs > states.Count)
+
+                        ClientKeys keys = keyMapper.devices[connID];
+                        if (keys == null)
+                        {
+                            continue;
+                        }
+
+                        ulong timems = (ulong)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                        keys.lastLatencySum += (int)(timems - keys.lastPoll);
+                        keys.lastPolls++;
+                        keys.lastPoll = timems;
+
+                        /*while (inputs > states.Count)
                         {
                             AddBinding();
-                        }
+                        }*/
                         for (int i = 0; i < inputs; i++)
                         {
+                            KeyBinding k = keys.keyBindings[i];
                             int state = BitConverter.ToInt32(bytes, 8 + 4 * i);
-
                             
-                            int cKeyState = states[i];
-                            states[i] = state;
-                            if (bindings[i].inputType == 0)
+                            int cKeyState = k.state;
+                            k.state = state;
+                            if (k.inputType == 1)
                             {
                                 //Console.WriteLine("Input "+i+": " + state + ", ");
                                 /*
@@ -126,20 +143,20 @@ namespace NetKeyServerGUI
                                     states[i] = state;
                                     if (bindings[i].vKey != Keys.VirtualKeyStates.VK_NONE)
                                     {*/
-                                SetKeyState((int)bindings[i].vKey, state != 0);
+                                SetKeyState((int)k.vKey, state != 0);
                                     /*}
                                 }*/
-                            } else if (bindings[i].inputType == 1)
+                            } else if (k.inputType == 2)
                             {
                                 short slider1 = (short)((state & 0xFFFF0000) >> 16);
                                 short slider2 = (short)(state & 0xFFFF);
                                 //Console.WriteLine("Slider " + i + ": " + state);
                                 //Console.WriteLine("Slider " + i + ": " + slider1 + ":"+slider2+", ");
 
-                                SetKeyState((int)bindings[i].vKeyT1L, slider1 < 0);
-                                SetKeyState((int)bindings[i].vKeyT2L, slider2 < 0);
-                                SetKeyState((int)bindings[i].vKeyT1R, slider1 > 0);
-                                SetKeyState((int)bindings[i].vKeyT2R, slider2 > 0);
+                                SetKeyState((int)k.vKeyT1L, slider1 < 0);
+                                SetKeyState((int)k.vKeyT2L, slider2 < 0);
+                                SetKeyState((int)k.vKeyT1R, slider1 > 0);
+                                SetKeyState((int)k.vKeyT2R, slider2 > 0);
                             }
                             
                         }
@@ -154,13 +171,14 @@ namespace NetKeyServerGUI
             }
         }
 
+        [Obsolete]
         public void ThreadUpdater()
         {
             try
             {
                 while (true)
                 {
-                    Dispatcher.Invoke(delegate
+                    /*Dispatcher.Invoke(delegate
                     {
                         for (int x = 0; x != bindings.Count; x++)
                         {
@@ -178,7 +196,7 @@ namespace NetKeyServerGUI
                                 bindings[x].pressedIndicatorT2RSlide.Fill = (slider2 > 0) ? Brushes.Red : Brushes.White;
                             }
                         }
-                    });
+                    });*/
                     Thread.Sleep(4);
                 }
             } catch (TaskCanceledException e)

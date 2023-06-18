@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 
 namespace NetKeyServerGUI
 {
@@ -16,12 +18,22 @@ namespace NetKeyServerGUI
         public int port;
         public Dictionary<int, ClientKeys> devices = new Dictionary<int, ClientKeys>();
         int nextDeviceID = 3938;
+        MainWindow caller;
 
-        public TCPNetKeyClientResponder(int port)
+        public TCPNetKeyClientResponder(int port, MainWindow caller)
         {
             this.port = port;
 
             new Thread(TCPThread).Start();
+            this.caller = caller;
+        }
+
+        public void NewDeviceConnected(ClientKeys k)
+        {
+            caller.Dispatcher.Invoke(delegate
+            {
+                caller.devicesList.Items.Add(new DeviceListItem(k));
+            });
         }
 
         public void TCPThread()
@@ -60,11 +72,12 @@ namespace NetKeyServerGUI
                             {
                                 Console.WriteLine($"bad input id? [{index} - {x}]");
                             }
-                            keybinds.inputTypes.Add(btnType);
-                            keybinds.states.Add(0);
-                            keybinds.keyBindings.Add(new KeyBinding());
+                            //keybinds.inputTypes.Add(btnType);
+                            //keybinds.states.Add(0);
+                            keybinds.keyBindings.Add(new KeyBinding(btnType));
                         }
                         devices.Add(connectionID, keybinds);
+                        NewDeviceConnected(keybinds);
 
                         str.Write(new byte[] { 0x39 }, 0, 1);
                         str.Write(BitConverter.GetBytes(connectionID), 0, 4);
