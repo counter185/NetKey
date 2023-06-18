@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace NetKeyServerGUI
 {
@@ -38,7 +39,7 @@ namespace NetKeyServerGUI
         public bool[] vKeyStates = new bool[0xFF];
 
         public TCPNetKeyClientResponder keyMapper;
-        public int port = 5555;
+        public int port = 5556;
 
         public void SetKeyState(int key, bool state)
         {
@@ -203,6 +204,19 @@ namespace NetKeyServerGUI
             {
                 //and
             }
+        }
+
+        private void ipconfig_Click(object sender, RoutedEventArgs e)
+        {
+            Process a = System.Diagnostics.Process.Start(new ProcessStartInfo
+            {
+                FileName = "ipconfig",
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            });
+            string output = a.StandardOutput.ReadToEnd();
+            string messageOutput = String.Join("\n", (from x in output.Split('\n') where (!x.StartsWith("  ") || x.Contains("IP") || x.Contains("State")) select x));
+            MessageBox.Show(messageOutput, "IP Configuration");
         }
     }
 }
