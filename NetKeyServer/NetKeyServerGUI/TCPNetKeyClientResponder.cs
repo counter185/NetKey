@@ -53,6 +53,14 @@ namespace NetKeyServerGUI
                         {
                             throw new Exception("Bad header");
                         }
+
+                        byte[] nameSizeBytes = new byte[4];
+                        str.Read(nameSizeBytes, 0, 4);
+                        int nameLen = BitConverter.ToInt32(nameSizeBytes, 0);
+                        byte[] deviceName = new byte[nameLen];
+                        str.Read(deviceName, 0, nameLen);
+                        string name = Encoding.UTF8.GetString(deviceName);
+
                         byte[] sizebytes = new byte[2];
                         str.Read(sizebytes, 0, 2);
                         short size = BitConverter.ToInt16(sizebytes, 0);
@@ -63,6 +71,8 @@ namespace NetKeyServerGUI
 
                         int connectionID = nextDeviceID++;
                         ClientKeys keybinds = new ClientKeys(connectionID);
+
+                        keybinds.deviceName = name;
                         
                         for (int x = 0; x < size; x++)
                         {

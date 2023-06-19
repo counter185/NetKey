@@ -27,6 +27,7 @@ namespace NetKeyServerGUI
         {
             this.target = target;
             InitializeComponent();
+            deviceName.Content = target.deviceName;
             idtext.Content = $"ID: {target.deviceID}";
             int x = 1;
             lastTimeSeconds = DateTime.Now.Ticks / TimeSpan.TicksPerSecond;

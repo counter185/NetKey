@@ -41,6 +41,8 @@ namespace NetKeyServerGUI
         public TCPNetKeyClientResponder keyMapper;
         public int port = 5556;
 
+        System.Timers.Timer inactivityDCTimer;
+
         public void SetKeyState(int key, bool state)
         {
             if (vKeyStates[key] != state)
@@ -57,9 +59,23 @@ namespace NetKeyServerGUI
             new Thread(ThreadUDPServer).Start();
             //new Thread(ThreadUpdater).Start();
 
-            devicesList.PreviewMouseDoubleClick += (sender, mouseButtonEvent) =>
-            {
+            inactivityDCTimer = new System.Timers.Timer(10000);
+            inactivityDCTimer.Elapsed += delegate {
+                Dispatcher.Invoke(delegate
+                {
+                    ulong secnow = (ulong)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    var a = (from x in keyMapper.devices.Keys where (keyMapper.devices[x].lastPoll+10000) < secnow select x).ToList();
+                    foreach (int x in a)
+                    {
+                        int lookupConnID = keyMapper.devices[x].deviceID;
+                        keyMapper.devices.Remove(x);
+                        DeviceListItem[] deviceListItems = new DeviceListItem[devicesList.Items.Count];
+                        devicesList.Items.CopyTo(deviceListItems, 0);
+                        devicesList.Items.Remove((from y in deviceListItems where y.target.deviceID == lookupConnID select y).First());
+                    }
+                });
             };
+            inactivityDCTimer.Start();
 
             keyMapper = new TCPNetKeyClientResponder(port, this);
 
@@ -110,6 +126,10 @@ namespace NetKeyServerGUI
                         //Console.WriteLine("Next frame");
                         bytes = listener.Receive(ref groupEP);
                         int connID = BitConverter.ToInt32(bytes, 0);
+                        if (!keyMapper.devices.ContainsKey(connID))
+                        {
+                            continue;
+                        }
                         int inputs = BitConverter.ToInt32(bytes, 4);
                         //Console.WriteLine(inputs+" inputs: ");
 

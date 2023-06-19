@@ -20,7 +20,7 @@ namespace NetKeyServerGUI
     /// </summary>
     public partial class DeviceListItem : UserControl
     {
-        ClientKeys target;
+        public ClientKeys target;
 
         public DeviceListItem(ClientKeys target)
         {

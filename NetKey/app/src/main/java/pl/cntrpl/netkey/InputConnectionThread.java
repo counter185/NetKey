@@ -55,13 +55,15 @@ public class InputConnectionThread extends Thread{
             try {
                 socket = new DatagramSocket(caller.port);
                 address = InetAddress.getByName(caller.ip);
-                if (!caller.paused) {
-                    while (true) {
-                        if (caller.isDestroyed() || caller.paused) {
-                            System.out.println("goobye");
-                            socket.close();
-                            break;
-                        }
+                while (true) {
+                    if (caller.isDestroyed()) {
+                        System.out.println("goobye");
+                        socket.close();
+                        break;
+                    } else if (caller.paused) {
+                        WriteOut(socket);
+                        Thread.sleep(500);
+                    } else {
                         WriteOut(socket);
                         Thread.sleep(caller.pollRate);
                     }

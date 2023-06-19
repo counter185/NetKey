@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -49,7 +51,7 @@ public class ThreadConnectToServer extends Thread{
     }
 
     public void closeConnectionDialog(){
-        new Handler(Looper.getMainLooper()).post(() -> { awaitDialog.hide(); });
+        new Handler(Looper.getMainLooper()).post(() -> { awaitDialog.dismiss(); });
     }
 
     public void error(String message) {
@@ -88,6 +90,15 @@ public class ThreadConnectToServer extends Thread{
             OutputStream out = tcpSocket.getOutputStream();
             InputStream in = tcpSocket.getInputStream();
             out.write(new byte[] {0x4e, 0x45, 0x54, 0x4b, 0x45, 0x59});
+
+            String deviceName = Build.MANUFACTURER + " " + Build.MODEL + "(Android"+Build.VERSION.RELEASE+")";
+            if (deviceName.length() > 128){
+                deviceName = deviceName.substring(0,128);
+            }
+            byte[] namebytes = deviceName.getBytes("UTF8");
+            out.write(InputConnectionThread.intToByteArray(namebytes.length));
+            out.write(namebytes);
+
             int sz = inputListToSend.size()/2;
             out.write(new byte[] {(byte)(sz&0xff), (byte)((sz>>8)&0xff)} );
             for (byte a : inputListToSend){
