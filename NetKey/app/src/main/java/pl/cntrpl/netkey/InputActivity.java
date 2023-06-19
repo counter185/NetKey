@@ -37,6 +37,8 @@ public class InputActivity extends Activity {
     public int pollRate;
     public int connectionID;
 
+    public boolean isPreview = false;
+
     public SurfaceView nSrfc = null;
 
     public List<CustomInput> customInputs = new ArrayList<CustomInput>();
@@ -67,15 +69,18 @@ public class InputActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Bundle bndl = getIntent().getBundleExtra("pl.cntrpl.netkey");
-        ip = bndl.getString("ipaddr");
-        try {
-            port = Integer.parseInt(bndl.getString("port"));
-        } catch (Exception e){
-            port = 5555;
+        isPreview = bndl.getBoolean("preview", false);
+        if (!isPreview) {
+            ip = bndl.getString("ipaddr");
+            try {
+                port = Integer.parseInt(bndl.getString("port"));
+            } catch (Exception e) {
+                port = 5555;
+            }
+            pollRate = bndl.getInt("pollrate");
+            connectionID = bndl.getInt("connid");
+            //customInputs = ConfigActivity.customInputs;
         }
-        pollRate = bndl.getInt("pollrate");
-        connectionID = bndl.getInt("connid");
-        //customInputs = ConfigActivity.customInputs;
         generateInputsList(bndl.getParcelable("inputconf"));
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -218,8 +223,10 @@ public class InputActivity extends Activity {
             renderThread.start();
         }
 
-        netPostThread = new InputConnectionThread(this);
-        netPostThread.start();
+        if (!isPreview) {
+            netPostThread = new InputConnectionThread(this);
+            netPostThread.start();
+        }
     }
 
 

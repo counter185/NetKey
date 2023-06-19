@@ -135,6 +135,14 @@ public class ConfigActivity extends Activity {
         });
 
         ConfigActivity bruh = this;
+        ((Button)findViewById(R.id.buttonPreviewConf)).setOnClickListener((v)->{
+            Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
+            Bundle bndl = new Bundle();
+            bndl.putBoolean("preview", true);
+            bndl.putParcelable("inputconf", inputs);
+            switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
+            startActivity(switchActivityIntent);
+        });
         ((Button)findViewById(R.id.buttonConnect)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
