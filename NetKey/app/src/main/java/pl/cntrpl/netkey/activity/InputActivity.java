@@ -1,9 +1,8 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.activity;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
 import android.app.Activity;
 import android.graphics.Paint;
@@ -18,10 +17,14 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.cntrpl.netkey.InputSurfaceView;
+import pl.cntrpl.netkey.thread.RendererThread;
+import pl.cntrpl.netkey.TouchState;
 import pl.cntrpl.netkey.configuration.InputConfiguration;
 import pl.cntrpl.netkey.input.CustomInput;
 import pl.cntrpl.netkey.input.InputButton;
 import pl.cntrpl.netkey.input.InputDivaSlider;
+import pl.cntrpl.netkey.thread.InputConnectionThread;
 
 public class InputActivity extends Activity {
 

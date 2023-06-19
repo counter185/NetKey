@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "pl.cntrpl.netkey"
-        minSdk 18
+        minSdk 15
         targetSdk 32
         versionCode 1
         versionName "1.0"

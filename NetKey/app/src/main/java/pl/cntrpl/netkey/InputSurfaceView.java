@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.view.SurfaceView;
 
+import pl.cntrpl.netkey.activity.InputActivity;
 import pl.cntrpl.netkey.input.CustomInput;
 
 public class InputSurfaceView extends SurfaceView {

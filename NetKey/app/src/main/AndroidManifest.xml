@@ -17,15 +17,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NetKey">
         <activity
-            android:name=".ConfigPickerActivity"
+            android:name=".activity.ConfigPickerActivity"
             android:exported="false"
             android:theme="@android:style/Theme.Holo.NoActionBar"/>
         <activity
-            android:name=".InputActivity"
+            android:name=".activity.InputActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ConfigActivity"
+            android:name=".activity.ConfigActivity"
             android:exported="true"
             android:theme="@android:style/Theme.Holo">
             <intent-filter>

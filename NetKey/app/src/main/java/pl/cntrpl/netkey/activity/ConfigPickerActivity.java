@@ -1,6 +1,4 @@
-package pl.cntrpl.netkey;
-
-import androidx.appcompat.app.AppCompatActivity;
+package pl.cntrpl.netkey.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +13,9 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.List;
-import java.util.zip.Inflater;
+
+import pl.cntrpl.netkey.configuration.ConfigFilesIO;
+import pl.cntrpl.netkey.R;
 
 public class ConfigPickerActivity extends Activity {
 

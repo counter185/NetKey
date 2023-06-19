@@ -1,27 +1,22 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.thread;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.EditText;
 import android.widget.Toast;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
+import pl.cntrpl.netkey.activity.InputActivity;
 import pl.cntrpl.netkey.configuration.InputConfiguration;
 
 public class ThreadConnectToServer extends Thread{

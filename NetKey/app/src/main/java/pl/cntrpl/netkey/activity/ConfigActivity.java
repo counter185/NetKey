@@ -1,4 +1,4 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,7 +23,10 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import pl.cntrpl.netkey.configuration.ConfigFilesIO;
+import pl.cntrpl.netkey.R;
 import pl.cntrpl.netkey.configuration.InputConfiguration;
+import pl.cntrpl.netkey.thread.ThreadConnectToServer;
 
 public class ConfigActivity extends Activity {
 

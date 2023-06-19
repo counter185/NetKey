@@ -1,4 +1,4 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.configuration;
 
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.cntrpl.netkey.R;
+import pl.cntrpl.netkey.activity.ConfigActivity;
 import pl.cntrpl.netkey.configuration.InputConfiguration;
 
 public class ConfigFilesIO {

@@ -1,8 +1,6 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.thread;
 
-import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
+import pl.cntrpl.netkey.activity.InputActivity;
 
 public class RendererThread extends Thread{
 

@@ -3,7 +3,7 @@ package pl.cntrpl.netkey.input;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import pl.cntrpl.netkey.InputActivity;
+import pl.cntrpl.netkey.activity.InputActivity;
 
 public class InputButton extends CustomInput {
 

@@ -1,5 +1,6 @@
-package pl.cntrpl.netkey;
+package pl.cntrpl.netkey.thread;
 
+import android.app.Activity;
 import android.util.Log;
 
 import java.io.IOException;
@@ -7,6 +8,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+import pl.cntrpl.netkey.BuildConfig;
+import pl.cntrpl.netkey.activity.InputActivity;
 import pl.cntrpl.netkey.input.CustomInput;
 
 public class InputConnectionThread extends Thread{
@@ -48,15 +51,23 @@ public class InputConnectionThread extends Thread{
         }
     }
 
+    public boolean ActivityDestroyed(Activity a){
+        if (BuildConfig.VERSION_CODE >= 17){
+            return a.isDestroyed();
+        } else {
+            return a.isFinishing();
+        }
+    }
+
     @Override
     public void run()
     {
-        while (!caller.isDestroyed()) {
+        while (!ActivityDestroyed(caller)) {
             try {
                 socket = new DatagramSocket(caller.port);
                 address = InetAddress.getByName(caller.ip);
                 while (true) {
-                    if (caller.isDestroyed()) {
+                    if (ActivityDestroyed(caller)) {
                         System.out.println("goobye");
                         socket.close();
                         break;
