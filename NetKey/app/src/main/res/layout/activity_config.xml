@@ -54,6 +54,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp">
+            <Button
+                android:id="@+id/buttonOpenNetworkSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tethering settings" />
+
+            <Button
+                android:id="@+id/buttonShowNetworks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connected networks"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -69,8 +88,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:max="16"
-                android:progress="15"
                 android:checked="true" />
         </LinearLayout>
         <LinearLayout

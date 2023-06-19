@@ -2,8 +2,12 @@ package pl.cntrpl.netkey;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,8 +15,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 import pl.cntrpl.netkey.configuration.InputConfiguration;
 
@@ -107,6 +116,7 @@ public class ConfigActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ConfigActivity bruh = this;
         setContentView(R.layout.activity_config);
 
         appSettingsFile = new File(getExternalFilesDir(null), "/appsettings.ini");
@@ -119,12 +129,47 @@ public class ConfigActivity extends Activity {
 
         inputs.NewRow();
 
-        ((Button)findViewById(R.id.buttonRowsUp)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputs.NewRow();
-                CreateRows();
-            }
+        findViewById(R.id.buttonOpenNetworkSettings).setOnClickListener(view -> {
+            final Intent intent = new Intent(Intent.ACTION_MAIN, null);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            final ComponentName cn = new ComponentName("com.android.settings", "com.android.settings.TetherSettings");
+            intent.setComponent(cn);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity( intent);
+        });
+        findViewById(R.id.buttonShowNetworks).setOnClickListener(view -> {
+            new Thread(() -> {
+                String networkAddresses = "";
+                try {
+                    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en
+                            .hasMoreElements(); ) {
+                        NetworkInterface intf = en.nextElement();
+                        //if (intf.getName().contains("wlan")) {
+                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
+                                .hasMoreElements(); ) {
+                            InetAddress inetAddress = enumIpAddr.nextElement();
+                            if (!inetAddress.isLoopbackAddress()
+                                    && (inetAddress.getAddress().length == 4)) {
+                                networkAddresses += intf.getName() + ": " + inetAddress.getHostAddress() + "\n";
+                                Log.d("net", inetAddress.getHostAddress());
+                                //return inetAddress.getHostAddress();
+                            }
+                        }
+                        //}
+                    }
+                } catch (SocketException ex) {
+                    Log.e("net", ex.toString());
+                }
+                final String netAddr2 = networkAddresses;
+                new Handler(Looper.getMainLooper()).post(()-> {
+                    Toast.makeText(bruh, netAddr2, Toast.LENGTH_LONG).show();
+                });
+            }).start();
+        });
+
+        findViewById(R.id.buttonRowsUp).setOnClickListener(view -> {
+            inputs.NewRow();
+            CreateRows();
         });
         findViewById(R.id.buttonRowsDown).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +180,6 @@ public class ConfigActivity extends Activity {
             }
         });
 
-        ConfigActivity bruh = this;
         findViewById(R.id.buttonPreviewConf).setOnClickListener((v)->{
             Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
             Bundle bndl = new Bundle();
