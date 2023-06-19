@@ -1,7 +1,9 @@
 package pl.cntrpl.netkey;
 
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -77,6 +79,7 @@ public class ConfigFilesIO {
             writer.write("IP="+((EditText)configActivity.findViewById(R.id.editTextIP)).getText().toString()+"\n");
             writer.write("port="+((EditText)configActivity.findViewById(R.id.editTextPort)).getText().toString()+"\n");
             writer.write("pollRate="+((SeekBar)configActivity.findViewById(R.id.sliderPollRate)).getProgress()+"\n");
+            writer.write("repeatButtons="+((CheckBox)configActivity.findViewById(R.id.checkBoxRepeat)).isChecked()+"\n");
             writer.close();
 
         } catch (IOException e) {
@@ -94,7 +97,11 @@ public class ConfigFilesIO {
                     } else if (line.startsWith("port=")) {
                         ((EditText) configActivity.findViewById(R.id.editTextPort)).setText(line.substring(line.indexOf('=') + 1));
                     } else if (line.startsWith("pollRate=")) {
-                        ((SeekBar) configActivity.findViewById(R.id.sliderPollRate)).setProgress(Integer.parseInt(line.substring(line.indexOf('=') + 1)));
+                        int val = Integer.parseInt(line.substring(line.indexOf('=') + 1));
+                        ((SeekBar) configActivity.findViewById(R.id.sliderPollRate)).setProgress(val);
+                        ((TextView) configActivity.findViewById(R.id.sliderPollRateText)).setText((1000/(17-val)) + "hz");
+                    } else if (line.startsWith("repeatButtons=")) {
+                        ((CheckBox) configActivity.findViewById(R.id.checkBoxRepeat)).setChecked(line.substring(line.indexOf('=') + 1).equals("true"));
                     }
                 }
             } catch (Exception e) {

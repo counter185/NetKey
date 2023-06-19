@@ -3,11 +3,16 @@ package pl.cntrpl.netkey.input;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import pl.cntrpl.netkey.InputActivity;
+
 public class InputButton extends CustomInput {
 
     private boolean state = false;
 
     private boolean lastState = false;
+    public long blockTimes = 0;
+    public int tapsThisTick = 0;
+    public int tapsLastTick = 0;
 
     public InputButton(int index, int splitX, int splitY){
         super(0,0,0,0);
@@ -38,7 +43,7 @@ public class InputButton extends CustomInput {
         int h = a.getHeight();
 
         if (lastState){
-            b.setColor(0xA00000A0);
+            b.setColor(blockTimes % 8 != 0 ? 0xA0AA0000 : 0xA00000A0);
             SDLRectLikeFill(a, b, posX, posY, width, height);
         }
 
@@ -64,17 +69,25 @@ public class InputButton extends CustomInput {
     @Override
     public void UpdateState(float touchX, float touchY, int tID) {
         state = TouchInBound(touchX, touchY);
+        if (InputActivity.repeatButtons && ++tapsThisTick > tapsLastTick && tapsLastTick > 0){
+            blockTimes+=8;
+        }
         lastState = state;
     }
 
     @Override
     public int GetState() {
-        return lastState ? 255 : 0;
+        if (blockTimes > 0){
+            blockTimes--;
+        }
+        return ((lastState && blockTimes % 8 == 0) || blockTimes == 1) ? 255 : 0;
     }
 
     @Override
     public void NextTick() {
         lastState = state;
         state = false;
+        tapsLastTick = tapsThisTick;
+        tapsThisTick = 0;
     }
 }

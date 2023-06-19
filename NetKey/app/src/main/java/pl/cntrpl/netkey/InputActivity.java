@@ -35,6 +35,9 @@ public class InputActivity extends Activity {
     public String ip ="";
     public int port = 5555;
     public int pollRate;
+
+    //todo: pass this to the buttons in some other way
+    public static boolean repeatButtons;
     public int connectionID;
 
     public boolean isPreview = false;
@@ -70,6 +73,7 @@ public class InputActivity extends Activity {
 
         Bundle bndl = getIntent().getBundleExtra("pl.cntrpl.netkey");
         isPreview = bndl.getBoolean("preview", false);
+        repeatButtons = bndl.getBoolean("repeatbtn", true);
         if (!isPreview) {
             ip = bndl.getString("ipaddr");
             try {

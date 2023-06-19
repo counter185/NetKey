@@ -29,16 +29,18 @@ public class ThreadConnectToServer extends Thread{
     public InputConfiguration conf;
     public AlertDialog awaitDialog;
     public Context caller;
+    public boolean repeatButtons;
     public int pollRate;
 
     public int assignedID = 0;
 
-    public ThreadConnectToServer(String ip, String port, InputConfiguration inputConfig, AlertDialog toHide, Context caller, int pollRate){
+    public ThreadConnectToServer(String ip, String port, InputConfiguration inputConfig, AlertDialog toHide, Context caller, boolean repeat, int pollRate){
         this.ip = ip;
         this.port = port;
         this.conf = inputConfig;
         this.awaitDialog = toHide;
         this.caller = caller;
+        this.repeatButtons = repeat;
         this.pollRate = pollRate;
     }
 
@@ -113,6 +115,7 @@ public class ThreadConnectToServer extends Thread{
                 bndl.putInt("pollrate", pollRate);
                 bndl.putParcelable("inputconf", conf);
                 bndl.putInt("connid", assignedID);
+                bndl.putBoolean("repeatbtn", repeatButtons);
                 switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
                 caller.startActivity(switchActivityIntent);
             });

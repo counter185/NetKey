@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -125,7 +126,7 @@ public class ConfigActivity extends Activity {
                 CreateRows();
             }
         });
-        ((Button)findViewById(R.id.buttonRowsDown)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.buttonRowsDown).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (inputs.RemoveLastRow()){
@@ -135,7 +136,7 @@ public class ConfigActivity extends Activity {
         });
 
         ConfigActivity bruh = this;
-        ((Button)findViewById(R.id.buttonPreviewConf)).setOnClickListener((v)->{
+        findViewById(R.id.buttonPreviewConf).setOnClickListener((v)->{
             Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
             Bundle bndl = new Bundle();
             bndl.putBoolean("preview", true);
@@ -143,39 +144,27 @@ public class ConfigActivity extends Activity {
             switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
             startActivity(switchActivityIntent);
         });
-        ((Button)findViewById(R.id.buttonConnect)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        findViewById(R.id.buttonConnect).setOnClickListener(view -> {
 
-                ConfigFilesIO.SaveLastAppSettings(bruh, appSettingsFile);
+            ConfigFilesIO.SaveLastAppSettings(bruh, appSettingsFile);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(bruh);
+            AlertDialog.Builder builder = new AlertDialog.Builder(bruh);
 
-                builder.setMessage("Connecting to " + ((EditText)findViewById(R.id.editTextIP)).getText().toString())
-                        .setTitle("Connecting...");
-                AlertDialog dialog = builder.create();
-                dialog.setCancelable(false);
-                dialog.show();
+            builder.setMessage("Connecting to " + ((EditText)findViewById(R.id.editTextIP)).getText().toString())
+                    .setTitle("Connecting...");
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
 
-                new ThreadConnectToServer(
-                        ((EditText)findViewById(R.id.editTextIP)).getText().toString(),
-                        ((EditText)findViewById(R.id.editTextPort)).getText().toString(),
-                        inputs,
-                        dialog,
-                        bruh,
-                        17-((SeekBar)findViewById(R.id.sliderPollRate)).getProgress()
-                ).start();
-
-
-                /*Intent switchActivityIntent = new Intent(bruh, InputActivity.class);
-                pollRate = 17-((SeekBar)findViewById(R.id.sliderPollRate)).getProgress();
-                Bundle bndl = new Bundle();
-                bndl.putString("ipaddr", ((EditText)findViewById(R.id.editTextIP)).getText().toString());
-                bndl.putString("port", ((EditText)findViewById(R.id.editTextPort)).getText().toString());
-                bndl.putParcelable("inputconf", inputs);
-                switchActivityIntent.putExtra("pl.cntrpl.netkey", bndl);
-                startActivity(switchActivityIntent);*/
-            }
+            new ThreadConnectToServer(
+                    ((EditText)findViewById(R.id.editTextIP)).getText().toString(),
+                    ((EditText)findViewById(R.id.editTextPort)).getText().toString(),
+                    inputs,
+                    dialog,
+                    bruh,
+                    ((CheckBox)findViewById(R.id.checkBoxRepeat)).isChecked(),
+                    17-((SeekBar)findViewById(R.id.sliderPollRate)).getProgress()
+            ).start();
         });
 
         ((SeekBar)findViewById(R.id.sliderPollRate)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -189,21 +178,15 @@ public class ConfigActivity extends Activity {
             public void onStopTrackingTouch(SeekBar seekBar) { }
         });
 
-        ((Button)findViewById(R.id.buttonSaveConfFile)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(bruh, ConfigPickerActivity.class);
-                i.putExtra("saveprompt", true);
-                startActivityForResult(i, CONFIG_SAVE);
-            }
+        findViewById(R.id.buttonSaveConfFile).setOnClickListener(view -> {
+            Intent i = new Intent(bruh, ConfigPickerActivity.class);
+            i.putExtra("saveprompt", true);
+            startActivityForResult(i, CONFIG_SAVE);
         });
-        ((Button)findViewById(R.id.buttonLoadConfFile)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(bruh, ConfigPickerActivity.class);
-                i.putExtra("saveprompt", false);
-                startActivityForResult(i, CONFIG_LOAD);
-            }
+        findViewById(R.id.buttonLoadConfFile).setOnClickListener(view -> {
+            Intent i = new Intent(bruh, ConfigPickerActivity.class);
+            i.putExtra("saveprompt", false);
+            startActivityForResult(i, CONFIG_LOAD);
         });
 
         CreateRows();
