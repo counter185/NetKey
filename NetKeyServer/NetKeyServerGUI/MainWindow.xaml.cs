@@ -39,7 +39,7 @@ namespace NetKeyServerGUI
         public bool[] vKeyStates = new bool[0xFF];
 
         public TCPNetKeyClientResponder keyMapper;
-        public int port = 5556;
+        public int port = 5555;
 
         System.Timers.Timer inactivityDCTimer;
 
