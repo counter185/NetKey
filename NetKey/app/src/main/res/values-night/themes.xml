@@ -17,6 +17,7 @@
     <style name="Theme.NetKey.InputScreen" parent="Theme.NetKey">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
   <!-- Base application theme. -->
     <style name="Base.Theme.NetKey" parent="Theme.Material3.DayNight">

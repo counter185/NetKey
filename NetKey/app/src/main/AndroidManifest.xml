@@ -23,6 +23,7 @@
         <activity
             android:name=".activity.InputActivity"
             android:exported="false"
+            android:theme="@style/Theme.NetKey.InputScreen"
             android:screenOrientation="landscape" />
         <activity
             android:name=".activity.ConfigActivity"
