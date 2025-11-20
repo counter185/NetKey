@@ -1,6 +1,7 @@
 package pl.cntrpl.netkey.thread;
 
 import android.app.Activity;
+import android.os.Build;
 import android.util.Log;
 
 import java.io.IOException;
@@ -8,7 +9,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import pl.cntrpl.netkey.BuildConfig;
 import pl.cntrpl.netkey.activity.InputActivity;
 import pl.cntrpl.netkey.input.CustomInput;
 
@@ -52,7 +52,7 @@ public class InputConnectionThread extends Thread{
     }
 
     public boolean ActivityDestroyed(Activity a){
-        if (BuildConfig.VERSION_CODE >= 17){
+        if (Build.VERSION.SDK_INT >= 17){
             return a.isDestroyed();
         } else {
             return a.isFinishing();

@@ -21,17 +21,23 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.stream.Collector;
 
 import pl.cntrpl.netkey.configuration.ConfigFilesIO;
 import pl.cntrpl.netkey.R;
 import pl.cntrpl.netkey.configuration.InputConfiguration;
 import pl.cntrpl.netkey.thread.ThreadConnectToServer;
+import pl.cntrpl.netkey.thread.LANDiscoverThread;
 
 public class ConfigActivity extends Activity {
 
     final int CONFIG_SAVE = 3000;
     final int CONFIG_LOAD = 3001;
+    LANDiscoverThread lanThread = null;
 
     public InputConfiguration inputs = new InputConfiguration();
 
@@ -237,6 +243,17 @@ public class ConfigActivity extends Activity {
         });
 
         CreateRows();
+
+        lanThread = new LANDiscoverThread(this);
+        lanThread.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (lanThread != null) {
+            lanThread.interrupt();
+        }
+        super.onDestroy();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -255,5 +272,23 @@ public class ConfigActivity extends Activity {
                 CreateRows();
             }
         }
+    }
+
+    List<String> lanServers = new ArrayList<>();
+    public void lanServerFound(String address, int port) {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            String connStr = address + ":" + port;
+            if (!lanServers.contains(connStr)) {
+                lanServers.add(connStr);
+                LinearLayout addTarget = findViewById(R.id.lanServers);
+                Button btn = new Button(this);
+                btn.setText(connStr);
+                btn.setOnClickListener((v) -> {
+                    ((EditText)findViewById(R.id.editTextIP)).setText(address);
+                    ((EditText)findViewById(R.id.editTextPort)).setText(Integer.toString(port));
+                });
+                addTarget.addView(btn);
+            }
+        });
     }
 }

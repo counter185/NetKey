@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 
 namespace NetKeyServerGUI
 {
@@ -56,6 +57,7 @@ namespace NetKeyServerGUI
         {
             InitializeComponent();
 
+            new Thread(ThreadUDPBroadcast).Start();
             new Thread(ThreadUDPServer).Start();
             //new Thread(ThreadUpdater).Start();
 
@@ -106,6 +108,60 @@ namespace NetKeyServerGUI
 
         public List<int> states = new List<int>();
         public List<InputConfigList> bindings = new List<InputConfigList>();
+
+        public static List<IPAddress> GetBroadcastAddresses()
+        {
+            List<IPAddress> broadcastList = new List<IPAddress>();
+
+            var ifs = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface netInterface in ifs)
+            {
+                IPInterfaceProperties props = netInterface.GetIPProperties();
+                IPv4InterfaceProperties ipv4 = props.GetIPv4Properties();
+                var ipv4Addr = props.UnicastAddresses
+                    .Where(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
+                    .FirstOrDefault();
+                if (ipv4Addr != null)
+                {
+                    var mask = ipv4Addr.IPv4Mask.GetAddressBytes();
+                    var ipv4b = ipv4Addr.Address.GetAddressBytes();
+                    var broadcast = new byte[4];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        broadcast[i] = (byte)(ipv4b[i] | (mask[i] ^ 255));
+                    }
+                    broadcastList.Add(new IPAddress(broadcast));
+                }
+            }
+            broadcastList.Add(IPAddress.Broadcast);
+            return broadcastList;
+        }
+
+        public void ThreadUDPBroadcast()
+        {
+            
+            UdpClient udpClient = new UdpClient();
+            udpClient.EnableBroadcast = true;
+            udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, 6603));
+            while (true)
+            {
+                var broadcasts = from x in GetBroadcastAddresses()
+                                 select new IPEndPoint(x, 6603);
+                byte[] bytes = Encoding.ASCII.GetBytes("NETKEYSERVERDISCOVER"); //length 20
+                foreach (var b in broadcasts)
+                {
+                    try
+                    {
+                        Console.WriteLine($"Broadcasting to {b}");
+                        int sent = udpClient.Send(bytes, bytes.Length, b);
+                    }
+                    catch (SocketException) { }
+                }
+                
+
+                Thread.Sleep(2000);
+            }
+        }
 
         public void ThreadUDPServer()
         {
